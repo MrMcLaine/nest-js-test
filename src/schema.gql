@@ -1,0 +1,30 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type Mutation {
+  registerUser(data: RegisterUserInput!): UserDto!
+}
+
+type Query {
+  sayHello: String!
+}
+
+input RegisterUserInput {
+  email: String!
+  password: String!
+  username: String!
+}
+
+type UserDto {
+  email: String!
+  role: UserRole!
+  username: String!
+}
+
+"""Defines the role of a user in the system"""
+enum UserRole {
+  ADMIN
+  MODERATOR
+  USER
+}

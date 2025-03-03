@@ -13,7 +13,7 @@ export class UserResolver {
     }
 
     @Mutation(() => UserDto)
-    registerUser(@Args('data') data: RegisterUserInput): UserDto {
-        return this.userService.createUser(data);
+    async registerUser(@Args('data') data: RegisterUserInput): Promise<UserDto> {
+        return await this.userService.createUser(data);
     }
 }

@@ -26,4 +26,11 @@ export class BookResolver {
     async updateBook(@Args('data') data: UpdateBookInput): Promise<BookDto> {
         return this.bookService.updateBook(data);
     }
+
+    @Mutation(() => String)
+    @UseGuards(JwtAuthGuard, AclGuard)
+    @Permissions(UserActionPermissions.DELETE_BOOK)
+    async deleteBook(@Args('id') id: number): Promise<string> {
+        return this.bookService.deleteBook(id);
+    }
 }

@@ -1,6 +1,7 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { checkAffectedRows } from '@common/errors/check-affected.util';
 import { Book } from '@book/book.entity';
 import { toBookDto } from '@book/utils/toBookDto';
 import { CreateBookInput } from '@book/dto/create-book-input.dto';
@@ -37,13 +38,31 @@ export class BookService {
                 .returning('*')
                 .execute();
 
-            if (result.affected === 0) {
-                throw new NotFoundException(`Book with ID ${id} not found`);
-            }
+            checkAffectedRows({
+                affected: result.affected,
+                entityName: 'Book',
+                id,
+            });
 
             return toBookDto(result.raw[0]);
         } catch (error) {
             throw new Error(`Failed to update book: ${error.message}`);
+        }
+    }
+
+    async deleteBook(id: number): Promise<string> {
+        try {
+            const result = await this.bookRepository.delete(id);
+
+            checkAffectedRows({
+                affected: result.affected,
+                entityName: 'Book',
+                id,
+            });
+
+            return `Book with ID ${id} deleted successfully`;
+        } catch (error) {
+            throw new Error(`Failed to delete book: ${error.message}`);
         }
     }
 }

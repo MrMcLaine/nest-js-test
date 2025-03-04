@@ -13,8 +13,8 @@ import { BookModule } from '@book/book.module';
     imports: [
         GraphQLModule.forRoot(graphqlConfig),
         TypeOrmModule.forRoot(postgresSqlConfig),
-        UserModule,
         AuthModule,
+        UserModule,
         BookModule,
     ],
     controllers: [AppController],

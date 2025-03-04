@@ -12,6 +12,11 @@ export const graphqlConfig: ApolloDriverConfig = {
     allowBatchedHttpRequests: true,
 
     playground: false,
-
     plugins: [ApolloServerPluginLandingPageLocalDefault()],
+
+    context: ({ req }) => {
+        const token = req.headers.authorization || '';
+
+        return { token };
+    },
 };

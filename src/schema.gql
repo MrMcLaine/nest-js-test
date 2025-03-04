@@ -7,7 +7,13 @@ type AuthResponse {
   user: UserDto!
 }
 
+input LoginAuthInput {
+  email: String!
+  password: String!
+}
+
 type Mutation {
+  login(data: LoginAuthInput!): AuthResponse!
   registerUser(data: RegisterUserInput!): AuthResponse!
 }
 

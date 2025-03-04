@@ -7,12 +7,27 @@ type AuthResponse {
   user: UserDto!
 }
 
+type BookDto {
+  author: String!
+  description: String
+  publicationYear: Float!
+  title: String!
+}
+
+input BookInput {
+  author: String!
+  description: String
+  publicationYear: Int!
+  title: String!
+}
+
 input LoginAuthInput {
   email: String!
   password: String!
 }
 
 type Mutation {
+  createBook(data: BookInput!): BookDto!
   login(data: LoginAuthInput!): AuthResponse!
   registerUser(data: RegisterUserInput!): AuthResponse!
 }

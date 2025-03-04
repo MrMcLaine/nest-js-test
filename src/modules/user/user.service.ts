@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { AuthService } from '@auth/auth.service';
 import { BcryptUtil } from '@common/utils/bcrypt.util';
-import { User } from '@user/user.model';
+import { User } from '@user/user.entity';
 import { toCreateUserData } from '@user/utils/toCreateUserData';
 import { toUserDto } from '@user/utils/toUserDto';
 import { RegisterUserInput } from '@user/dto/register-user.input';
@@ -19,23 +19,33 @@ export class UserService {
     ) {}
 
     async findByEmailWithCheck(email: string): Promise<User> {
-        const user = await this.userRepository.findOneBy({ email });
+        try {
+            const user = await this.userRepository.findOneBy({ email });
 
-        if (!user) throw new Error(`User with email ${email} not found`);
+            if (!user) throw new Error(`User with email ${email} not found`);
 
-        return user;
+            return user;
+        } catch (error) {
+            throw new Error(`Error finding user by email: ${error.message}`);
+        }
     }
 
     async createUser(input: RegisterUserInput): Promise<AuthResponse> {
-        const hashedPassword = await BcryptUtil.hashPassword(input.password);
+        try {
+            const hashedPassword = await BcryptUtil.hashPassword(
+                input.password
+            );
 
-        const user = await this.userRepository.save(
-            toCreateUserData(hashedPassword, input)
-        );
+            const user = await this.userRepository.save(
+                toCreateUserData(hashedPassword, input)
+            );
 
-        return {
-            user: toUserDto(user),
-            token: this.authService.generateToken(toUserDto(user)),
-        };
+            return {
+                user: toUserDto(user),
+                token: this.authService.generateToken(toUserDto(user)),
+            };
+        } catch (error) {
+            throw new Error(`Failed to create user: ${error.message}`);
+        }
     }
 }

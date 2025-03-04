@@ -1,0 +1,6 @@
+export const BOOK_TITLE_MIN_LENGTH = 3;
+export const BOOK_TITLE_MAX_LENGTH = 100;
+export const BOOK_AUTHOR_MIN_LENGTH = 3;
+export const BOOK_AUTHOR_MAX_LENGTH = 50;
+export const BOOK_DESCRIPTION_MIN_LENGTH = 10;
+export const BOOK_DESCRIPTION_MAX_LENGTH = 500;

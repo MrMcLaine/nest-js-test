@@ -7,6 +7,7 @@ import { graphqlConfig } from '@config/graphql.config';
 import { postgresSqlConfig } from '@config/postgresSqlConfig';
 import { UserModule } from '@user/user.module';
 import { AuthModule } from '@auth/auth.module';
+import { BookModule } from '@book/book.module';
 
 @Module({
     imports: [
@@ -14,6 +15,7 @@ import { AuthModule } from '@auth/auth.module';
         TypeOrmModule.forRoot(postgresSqlConfig),
         UserModule,
         AuthModule,
+        BookModule,
     ],
     controllers: [AppController],
     providers: [AppService],

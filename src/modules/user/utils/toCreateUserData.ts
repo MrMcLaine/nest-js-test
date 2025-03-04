@@ -1,6 +1,6 @@
 import { RegisterUserInput } from '@user/dto/register-user.input';
 import { UserRole } from '@user/constants/user-role.enum';
-import { User } from '@user/user.model';
+import { User } from '@user/user.entity';
 
 export const toCreateUserData = (
     hashedPassword: string,

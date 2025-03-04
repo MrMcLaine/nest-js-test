@@ -1,9 +1,9 @@
 import { Resolver, Query, Mutation, Args } from '@nestjs/graphql';
 import { UserService } from './user.service';
 import { RegisterUserInput } from './dto/register-user.input';
-import { UserDto } from './dto/user-dto';
+import { AuthResponse } from '@user/dto/auth-response.dto';
 
-@Resolver(() => UserDto)
+@Resolver()
 export class UserResolver {
     constructor(private readonly userService: UserService) {}
 
@@ -12,8 +12,10 @@ export class UserResolver {
         return 'Hello, GraphQL!';
     }
 
-    @Mutation(() => UserDto)
-    async registerUser(@Args('data') data: RegisterUserInput): Promise<UserDto> {
+    @Mutation(() => AuthResponse)
+    async registerUser(
+        @Args('data') data: RegisterUserInput
+    ): Promise<AuthResponse> {
         return await this.userService.createUser(data);
     }
 }

@@ -2,8 +2,13 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type AuthResponse {
+  token: String!
+  user: UserDto!
+}
+
 type Mutation {
-  registerUser(data: RegisterUserInput!): UserDto!
+  registerUser(data: RegisterUserInput!): AuthResponse!
 }
 
 type Query {

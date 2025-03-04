@@ -1,22 +1,30 @@
 import { Injectable } from '@nestjs/common';
-import { UserRole } from './constants/user-role.enum';
-import { BcryptUtil } from './utils/bcrypt.util';
-import { RegisterUserInput } from './dto/register-user.input';
-import { UserDto } from './dto/user-dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { User } from '@user/user.model';
+import { BcryptUtil } from '@user/utils/bcrypt.util';
+import { toCreateUserData } from '@user/utils/toCreateUserData';
+import { toUserDto } from '@user/utils/toUserDto';
+import { RegisterUserInput } from '@user/dto/register-user.input';
+import { AuthResponse } from '@user/dto/auth-response.dto';
 
 @Injectable()
 export class UserService {
-    async createUser(input: RegisterUserInput): Promise<UserDto> {
-        console.log('input', input);
+    constructor(
+        @InjectRepository(User)
+        private readonly userRepository: Repository<User>
+    ) {}
 
+    async createUser(input: RegisterUserInput): Promise<AuthResponse> {
         const hashedPassword = await BcryptUtil.hashPassword(input.password);
-        console.log('hashedPassword', hashedPassword);
+
+        const user = await this.userRepository.save(
+            toCreateUserData(hashedPassword, input)
+        );
 
         return {
-            id: 1,
-            username: input.username,
-            email: input.email,
-            role: UserRole.USER,
+            user: toUserDto(user),
+            token: 'token',
         };
     }
 }

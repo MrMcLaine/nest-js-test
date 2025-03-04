@@ -1,6 +1,6 @@
 import { ObjectType, Field } from '@nestjs/graphql';
 import { UserRole } from '../constants/user-role.enum';
-import { BaseDtoEntity } from '../../../common/entities/base.dto.entity';
+import { BaseDtoEntity } from '@common/entities/base.dto.entity';
 
 @ObjectType()
 export class UserDto extends BaseDtoEntity {

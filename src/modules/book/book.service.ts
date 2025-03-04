@@ -4,9 +4,13 @@ import { Repository } from 'typeorm';
 import { checkAffectedRows } from '@common/errors/check-affected.util';
 import { Book } from '@book/book.entity';
 import { toBookDto } from '@book/utils/toBookDto';
+import { getBookFilters } from '@book/utils/getBooksFilter';
+import { getHasMore } from '@book/utils/getHasMore';
 import { CreateBookInput } from '@book/dto/create-book-input.dto';
 import { BookDto } from '@book/dto/book-dto';
 import { UpdateBookInput } from '@book/dto/update-book-input.dto';
+import { GetBooksInput } from '@book/dto/get-books-input.dto';
+import { GetBooksResponseDto } from '@book/dto/get-books-response.dto';
 
 @Injectable()
 export class BookService {
@@ -14,6 +18,23 @@ export class BookService {
         @InjectRepository(Book)
         private readonly bookRepository: Repository<Book>
     ) {}
+
+    async getBooks(input?: GetBooksInput): Promise<GetBooksResponseDto> {
+        try {
+            let queryBuilder = this.bookRepository.createQueryBuilder('book');
+            queryBuilder = getBookFilters(queryBuilder, input);
+
+            const books = await queryBuilder.getMany();
+            const { hasMore, data } = getHasMore(books, input?.limit);
+
+            return {
+                books: data.map(toBookDto),
+                hasMore,
+            };
+        } catch (error) {
+            throw new Error(`Failed to get books: ${error.message}`);
+        }
+    }
 
     async createBook(input: CreateBookInput): Promise<BookDto> {
         try {

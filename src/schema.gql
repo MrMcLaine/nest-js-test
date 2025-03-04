@@ -22,6 +22,21 @@ input CreateBookInput {
   title: String!
 }
 
+input GetBooksInput {
+  author: String
+  limit: Int
+  offset: Int
+  publicationYear: Int
+  sortField: SortField
+  sortOrder: SortOrder
+  title: String
+}
+
+type GetBooksResponseDto {
+  books: [BookDto!]!
+  hasMore: Boolean!
+}
+
 input LoginAuthInput {
   email: String!
   password: String!
@@ -36,6 +51,7 @@ type Mutation {
 }
 
 type Query {
+  getBooks(filters: GetBooksInput): GetBooksResponseDto!
   sayHello: String!
 }
 
@@ -43,6 +59,19 @@ input RegisterUserInput {
   email: String!
   password: String!
   username: String!
+}
+
+"""Sorting field for queries"""
+enum SortField {
+  AUTHOR
+  PUBLICATION_YEAR
+  TITLE
+}
+
+"""Sorting order for queries"""
+enum SortOrder {
+  ASC
+  DESC
 }
 
 input UpdateBookInput {

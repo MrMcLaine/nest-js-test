@@ -17,7 +17,7 @@ import {
 } from '@book/constants/other';
 
 @InputType()
-export class BookInput {
+export class CreateBookInput {
     @Field()
     @IsNotEmpty({ message: 'Title is required' })
     @Length(BOOK_TITLE_MIN_LENGTH, BOOK_TITLE_MAX_LENGTH, {

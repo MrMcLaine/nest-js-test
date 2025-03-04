@@ -10,11 +10,12 @@ type AuthResponse {
 type BookDto {
   author: String!
   description: String
+  id: Float!
   publicationYear: Float!
   title: String!
 }
 
-input BookInput {
+input CreateBookInput {
   author: String!
   description: String
   publicationYear: Int!
@@ -27,9 +28,10 @@ input LoginAuthInput {
 }
 
 type Mutation {
-  createBook(data: BookInput!): BookDto!
+  createBook(data: CreateBookInput!): BookDto!
   login(data: LoginAuthInput!): AuthResponse!
   registerUser(data: RegisterUserInput!): AuthResponse!
+  updateBook(data: UpdateBookInput!): BookDto!
 }
 
 type Query {
@@ -42,8 +44,17 @@ input RegisterUserInput {
   username: String!
 }
 
+input UpdateBookInput {
+  author: String
+  description: String
+  id: Int!
+  publicationYear: Int
+  title: String
+}
+
 type UserDto {
   email: String!
+  id: Float!
   role: UserRole!
   username: String!
 }

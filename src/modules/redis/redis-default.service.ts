@@ -1,6 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { Cache } from 'cache-manager';
+import { REDIS_DEFAULT_TTL } from '@redis/redis-ttl.const';
 
 @Injectable()
 export class RedisDefaultService {
@@ -10,7 +11,11 @@ export class RedisDefaultService {
         return await this.cacheManager.get<T>(key);
     }
 
-    async set<T>(key: string, value: T, ttl: number = 300): Promise<void> {
+    async set<T>(
+        key: string,
+        value: T,
+        ttl: number = REDIS_DEFAULT_TTL
+    ): Promise<void> {
         await this.cacheManager.set(key, value, ttl * 1000);
     }
 

@@ -1,9 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { BookReviewDto } from '@book-reviews/dto/book-review.dto';
-import { RedisDefaultService } from './redis-default.service';
-import { RedisKeyName } from './redis-key-name.enum';
 import { GetBooksInput } from '@book/dto/get-books-input.dto';
 import { GetBooksResponseDto } from '@book/dto/get-books-response.dto';
+import { RedisDefaultService } from './redis-default.service';
+import { REDIS_BOOKS_CACHE_TTL } from '@redis/redis-ttl.const';
+import { RedisKeyName } from './redis-key-name.enum';
 import { getBooksPageKey } from '@redis/utils/getBooksPageKey';
 
 @Injectable()
@@ -31,10 +32,7 @@ export class RedisService {
             const key = getBooksPageKey(input);
             await this.trackBookPageCache(key);
 
-            const cachedData =
-                await this.redisDefaultService.get<GetBooksResponseDto>(key);
-
-            return cachedData ?? null; // ✅ Always returns a value, even if undefined
+            return await this.redisDefaultService.get<GetBooksResponseDto>(key);
         } catch (error) {
             throw new Error(
                 `Failed to get all books from cache: ${error.message}`
@@ -61,7 +59,11 @@ export class RedisService {
     ): Promise<void> {
         try {
             const key = getBooksPageKey(input);
-            await this.redisDefaultService.set(key, response);
+            await this.redisDefaultService.set(
+                key,
+                response,
+                REDIS_BOOKS_CACHE_TTL
+            );
         } catch (error) {
             throw new Error(
                 `Failed to set all books to cache: ${error.message}`

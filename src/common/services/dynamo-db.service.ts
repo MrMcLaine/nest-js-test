@@ -5,6 +5,7 @@ import {
     DynamoDBDocumentClient,
     GetCommand,
     PutCommand,
+    ScanCommand,
     UpdateCommand,
 } from '@aws-sdk/lib-dynamodb';
 import { getDynamoDBClient } from '@config/aws.dynamo-db-client';
@@ -37,6 +38,19 @@ export class DynamoDBService implements OnModuleInit {
     ): Promise<any> {
         const params = { TableName: tableName, Key: key };
         return this.dynamoDBClient.send(new GetCommand(params));
+    }
+
+    async scanTable<T>(tableName: DynamoTables): Promise<T[]> {
+        try {
+            const params = { TableName: tableName };
+            const result = await this.dynamoDBClient.send(
+                new ScanCommand(params)
+            );
+
+            return (result.Items as T[]) || [];
+        } catch (error) {
+            throw new Error(`Failed to scan table: ${error.message}`);
+        }
     }
 
     async putItem(

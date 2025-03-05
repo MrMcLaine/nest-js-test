@@ -1,4 +1,4 @@
-import { Args, Mutation, Resolver, Context } from '@nestjs/graphql';
+import {Args, Mutation, Resolver, Context, Query} from '@nestjs/graphql';
 import { UseGuards } from '@nestjs/common';
 import { ContextNest } from '@common/types/context-nest.type';
 import { JwtAuthGuard } from '@auth/jwt-auth.guard';
@@ -13,6 +13,11 @@ import { UpdateBookReviewInput } from './dto/update-book-review-input.dto';
 @Resolver()
 export class BookReviewsResolver {
     constructor(private readonly bookReviewService: BookReviewsService) {}
+
+    @Query(() => [BookReviewDto])
+    async getAllBookReviews(): Promise<BookReviewDto[]> {
+        return this.bookReviewService.getAllBookReviews();
+    }
 
     @Mutation(() => BookReviewDto)
     @UseGuards(JwtAuthGuard, AclGuard)

@@ -7,10 +7,23 @@ import { checkBookReviewOwner } from './utils/check-book-review-owner.util';
 import { CreateBookReviewInput } from './dto/create-book-review-input.dto';
 import { BookReviewDto } from './dto/book-review.dto';
 import { UpdateBookReviewInput } from './dto/update-book-review-input.dto';
+import { BookReview } from './types/book-review.type';
 
 @Injectable()
 export class BookReviewsService {
     constructor(private readonly dynamoDBService: DynamoDBService) {}
+
+    async getAllBookReviews(): Promise<BookReviewDto[]> {
+        try {
+            return await this.dynamoDBService.scanTable<BookReview>(
+                DynamoTables.BOOK_REVIEWS
+            );
+        } catch (error) {
+            throw new Error(
+                `Failed to retrieve book reviews: ${error.message}`
+            );
+        }
+    }
 
     async createBookReview(
         data: CreateBookReviewInput,

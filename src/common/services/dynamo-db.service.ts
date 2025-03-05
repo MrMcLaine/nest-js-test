@@ -1,6 +1,7 @@
 import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
 import { ListTablesCommand } from '@aws-sdk/client-dynamodb';
 import {
+    DeleteCommand,
     DynamoDBDocumentClient,
     GetCommand,
     PutCommand,
@@ -57,6 +58,18 @@ export class DynamoDBService implements OnModuleInit {
             return result.Attributes;
         } catch (error) {
             dynamodbConditionalErrorHandle(error);
+        }
+    }
+
+    async deleteItem(
+        tableName: DynamoTables,
+        key: Record<string, any>
+    ): Promise<void> {
+        try {
+            const params = { TableName: tableName, Key: key };
+            await this.dynamoDBClient.send(new DeleteCommand(params));
+        } catch (error) {
+            throw new Error(`Failed to delete item: ${error.message}`);
         }
     }
 

@@ -47,7 +47,11 @@ export class BookReviewsService {
 
     async deleteBookReview(reviewId: string, userId: number): Promise<string> {
         try {
-            //TODO add the logic for delete item
+            checkBookReviewOwner({ userId, reviewId });
+
+            await this.dynamoDBService.deleteItem(DynamoTables.BOOK_REVIEWS, {
+                reviewId,
+            });
 
             return `Review with ID ${reviewId} deleted successfully`;
         } catch (error) {

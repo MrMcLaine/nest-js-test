@@ -61,6 +61,7 @@ type Mutation {
   createBook(data: CreateBookInput!): BookDto!
   createBookReview(data: CreateBookReviewInput!): BookReviewDto!
   deleteBook(id: Float!): String!
+  deleteBookReview(reviewId: String!): String!
   login(data: LoginAuthInput!): AuthResponse!
   registerUser(data: RegisterUserInput!): AuthResponse!
   updateBook(data: UpdateBookInput!): BookDto!

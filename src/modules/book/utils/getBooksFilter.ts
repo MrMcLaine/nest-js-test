@@ -1,6 +1,6 @@
 import { SelectQueryBuilder } from 'typeorm';
-import { DEFAULT_LIMIT_PER_PAGE } from '@book/constants/other';
 import { Book } from '@book/book.entity';
+import { getLimitOffset } from '@book/utils/getLimitOffset';
 import { GetBooksInput } from '@book/dto/get-books-input.dto';
 
 export const getBookFilters = (
@@ -33,8 +33,7 @@ export const getBookFilters = (
         queryBuilder.orderBy(`book.${filters.sortField}`, order);
     }
 
-    const limit = filters?.limit ?? DEFAULT_LIMIT_PER_PAGE;
-    const offset = filters?.offset ?? 0;
+    const { limit, offset } = getLimitOffset(filters);
 
     queryBuilder.limit(limit + 1);
     queryBuilder.offset(offset);

@@ -1,5 +1,6 @@
 import { Book } from '@book/book.entity';
-import { DEFAULT_LIMIT_PER_PAGE } from '@book/constants/other';
+import { getLimitOffset } from '@book/utils/getLimitOffset';
+import { GetBooksInput } from '@book/dto/get-books-input.dto';
 
 interface GetHasMoreResponse {
     hasMore: boolean;
@@ -8,12 +9,12 @@ interface GetHasMoreResponse {
 
 export const getHasMore = (
     items: Book[],
-    limit?: number
+    filters?: GetBooksInput
 ): GetHasMoreResponse => {
-    const limitNumber = limit ? limit : DEFAULT_LIMIT_PER_PAGE;
+    const { limit } = getLimitOffset(filters);
 
-    const hasMore = items.length > limitNumber;
-    const data = hasMore ? items.slice(0, limitNumber) : items;
+    const hasMore = items.length > limit;
+    const data = hasMore ? items.slice(0, limit) : items;
 
     return { hasMore, data };
 };

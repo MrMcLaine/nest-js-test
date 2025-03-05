@@ -2,10 +2,12 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { checkAffectedRows } from '@common/errors/check-affected.util';
+import { RedisService } from '@redis/redis.service';
 import { Book } from '@book/book.entity';
 import { toBookDto } from '@book/utils/toBookDto';
 import { getBookFilters } from '@book/utils/getBooksFilter';
 import { getHasMore } from '@book/utils/getHasMore';
+import { isCacheable } from '@book/utils/isCacheable';
 import { CreateBookInput } from '@book/dto/create-book-input.dto';
 import { BookDto } from '@book/dto/book-dto';
 import { UpdateBookInput } from '@book/dto/update-book-input.dto';
@@ -16,21 +18,34 @@ import { GetBooksResponseDto } from '@book/dto/get-books-response.dto';
 export class BookService {
     constructor(
         @InjectRepository(Book)
-        private readonly bookRepository: Repository<Book>
+        private readonly bookRepository: Repository<Book>,
+        private readonly redisService: RedisService
     ) {}
 
     async getBooks(input?: GetBooksInput): Promise<GetBooksResponseDto> {
         try {
+            const isCacheableObject = isCacheable(input);
+
+            if (isCacheableObject) {
+                const cachedData =
+                    await this.redisService.getBookPagesCache(input);
+
+                if (cachedData) return cachedData;
+            }
+
             let queryBuilder = this.bookRepository.createQueryBuilder('book');
             queryBuilder = getBookFilters(queryBuilder, input);
 
             const books = await queryBuilder.getMany();
-            const { hasMore, data } = getHasMore(books, input?.limit);
+            const { hasMore, data } = getHasMore(books, input);
 
-            return {
-                books: data.map(toBookDto),
-                hasMore,
-            };
+            const bookDtos = data.map(toBookDto);
+            const response: GetBooksResponseDto = { books: bookDtos, hasMore };
+
+            if (isCacheable(input))
+                await this.redisService.setBookPagesCache(response, input);
+
+            return response;
         } catch (error) {
             throw new Error(`Failed to get books: ${error.message}`);
         }
@@ -38,6 +53,8 @@ export class BookService {
 
     async createBook(input: CreateBookInput): Promise<BookDto> {
         try {
+            await this.redisService.clearAllBookPagesCache();
+
             const newBook = this.bookRepository.create(input);
             const savedBook = await this.bookRepository.save(newBook);
 
@@ -49,6 +66,8 @@ export class BookService {
 
     async updateBook(input: UpdateBookInput): Promise<BookDto> {
         try {
+            await this.redisService.clearAllBookPagesCache();
+
             const { id, ...updateData } = input;
 
             const result = await this.bookRepository
@@ -73,6 +92,8 @@ export class BookService {
 
     async deleteBook(id: number): Promise<string> {
         try {
+            await this.redisService.clearAllBookPagesCache();
+
             const result = await this.bookRepository.delete(id);
 
             checkAffectedRows({

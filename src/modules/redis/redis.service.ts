@@ -2,9 +2,14 @@ import { Injectable } from '@nestjs/common';
 import { BookReviewDto } from '@book-reviews/dto/book-review.dto';
 import { RedisDefaultService } from './redis-default.service';
 import { RedisKeyName } from './redis-key-name.enum';
+import { GetBooksInput } from '@book/dto/get-books-input.dto';
+import { GetBooksResponseDto } from '@book/dto/get-books-response.dto';
+import { getBooksPageKey } from '@redis/utils/getBooksPageKey';
 
 @Injectable()
 export class RedisService {
+    private readonly bookCacheKeys: Set<string> = new Set();
+
     constructor(private readonly redisDefaultService: RedisDefaultService) {}
 
     async getAllBookReviewsFromCache(): Promise<BookReviewDto[]> {
@@ -12,6 +17,24 @@ export class RedisService {
             return await this.redisDefaultService.get(
                 RedisKeyName.ALL_BOOK_REVIEWS
             );
+        } catch (error) {
+            throw new Error(
+                `Failed to get all books from cache: ${error.message}`
+            );
+        }
+    }
+
+    async getBookPagesCache(
+        input?: GetBooksInput
+    ): Promise<GetBooksResponseDto | null> {
+        try {
+            const key = getBooksPageKey(input);
+            await this.trackBookPageCache(key);
+
+            const cachedData =
+                await this.redisDefaultService.get<GetBooksResponseDto>(key);
+
+            return cachedData ?? null; // ✅ Always returns a value, even if undefined
         } catch (error) {
             throw new Error(
                 `Failed to get all books from cache: ${error.message}`
@@ -32,6 +55,20 @@ export class RedisService {
         }
     }
 
+    async setBookPagesCache(
+        response: GetBooksResponseDto,
+        input?: GetBooksInput
+    ): Promise<void> {
+        try {
+            const key = getBooksPageKey(input);
+            await this.redisDefaultService.set(key, response);
+        } catch (error) {
+            throw new Error(
+                `Failed to set all books to cache: ${error.message}`
+            );
+        }
+    }
+
     async deleteAllBookReviewsCache(): Promise<void> {
         try {
             await this.redisDefaultService.del(RedisKeyName.ALL_BOOK_REVIEWS);
@@ -40,5 +77,17 @@ export class RedisService {
                 `Failed to delete all books from cache: ${error.message}`
             );
         }
+    }
+
+    async clearAllBookPagesCache() {
+        console.log('Clearing all cached book pages...');
+        for (const key of this.bookCacheKeys) {
+            await this.redisDefaultService.del(key);
+        }
+        this.bookCacheKeys.clear(); // Reset tracking
+    }
+
+    private async trackBookPageCache(key: string) {
+        this.bookCacheKeys.add(key);
     }
 }

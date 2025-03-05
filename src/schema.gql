@@ -71,6 +71,7 @@ type Mutation {
 type Query {
   getAllBookReviews: [BookReviewDto!]!
   getBooks(filters: GetBooksInput): GetBooksResponseDto!
+  getUserActivityLogs(userId: Float!): [UserActivityLogDto!]!
   sayHello: String!
 }
 
@@ -106,6 +107,16 @@ input UpdateBookReviewInput {
   rating: Int
   reviewId: String!
   reviewText: String
+}
+
+type UserActivityLogDto {
+  requestBody: String
+  requestMethod: String!
+  requestParams: String
+  requestQuery: String
+  requestUrl: String!
+  timestamp: String!
+  userId: Float!
 }
 
 type UserDto {

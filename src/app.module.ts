@@ -10,6 +10,7 @@ import { UserModule } from '@user/user.module';
 import { AuthModule } from '@auth/auth.module';
 import { BookModule } from '@book/book.module';
 import { BookReviewsModule } from './modules/book-reviews/book-reviews.module';
+import { UserActivityLogsModule } from './modules/user-activity-log/user-activity-logs.module';
 
 @Module({
     imports: [
@@ -19,6 +20,7 @@ import { BookReviewsModule } from './modules/book-reviews/book-reviews.module';
         UserModule,
         BookModule,
         BookReviewsModule,
+        UserActivityLogsModule,
     ],
     controllers: [AppController],
     providers: [AppService, DynamoDBService],

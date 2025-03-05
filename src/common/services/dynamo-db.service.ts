@@ -5,6 +5,7 @@ import {
     DynamoDBDocumentClient,
     GetCommand,
     PutCommand,
+    QueryCommand,
     ScanCommand,
     UpdateCommand,
 } from '@aws-sdk/lib-dynamodb';
@@ -13,6 +14,7 @@ import { DynamoTables } from '@common/enums/dynamo-tables.enum';
 import { dynamodbConditionalErrorHandle } from '@common/errors/dynamodb-conditional-error-handle.util';
 import { toUpdateCommandInput } from '@common/utils/toUpdateCommandInput';
 import { UpdateDynamodbItemInput } from '@common/types/update-dynamodb-item-input.type';
+import { QueryCommandInput } from '@aws-sdk/lib-dynamodb/dist-types/commands/QueryCommand';
 
 @Injectable()
 export class DynamoDBService implements OnModuleInit {
@@ -38,6 +40,42 @@ export class DynamoDBService implements OnModuleInit {
     ): Promise<any> {
         const params = { TableName: tableName, Key: key };
         return this.dynamoDBClient.send(new GetCommand(params));
+    }
+
+    async queryTable<T>(
+        tableName: DynamoTables,
+        key: Record<string, any>
+    ): Promise<T[]> {
+        try {
+            const partitionKey = 'id';
+
+            if (!key[partitionKey]) {
+                console.warn(
+                    `Query skipped - missing partition key: ${partitionKey}`
+                );
+
+                return [];
+            }
+
+            const params: QueryCommandInput = {
+                TableName: tableName,
+                KeyConditionExpression: `${partitionKey} = :pk`,
+                ExpressionAttributeValues: {
+                    ':pk': key[partitionKey],
+                },
+            };
+
+            const result = await this.dynamoDBClient.send(
+                new QueryCommand(params)
+            );
+
+            return result.Items ? (result.Items as T[]) : [];
+        } catch (error) {
+            console.error(
+                `Failed to query table ${tableName}: ${error.message}`
+            );
+            return [];
+        }
     }
 
     async scanTable<T>(tableName: DynamoTables): Promise<T[]> {

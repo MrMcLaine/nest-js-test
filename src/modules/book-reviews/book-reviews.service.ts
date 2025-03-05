@@ -4,6 +4,7 @@ import { DynamoTables } from '@common/enums/dynamo-tables.enum';
 import { CreateBookReviewInput } from './dto/create-book-review-input.dto';
 import { BookReviewDto } from './dto/book-review.dto';
 import { generateReviewId } from './utils/generateBookReviewId';
+import { toBookReview } from './utils/toBookReview';
 
 @Injectable()
 export class BookReviewsService {
@@ -14,23 +15,14 @@ export class BookReviewsService {
         userId: number
     ): Promise<BookReviewDto> {
         try {
-            const reviewId = generateReviewId({
-                bookId: data.bookId,
-                userId,
-            });
+            const bookReviewData = toBookReview(userId, data);
 
-            const item = {
-                reviewId,
-                bookId: data.bookId,
-                userId: userId,
-                rating: data.rating,
-                reviewText: data.reviewText ?? null,
-                createdAt: new Date().toISOString(),
-            };
+            await this.dynamoDBService.putItem(
+                DynamoTables.BOOK_REVIEWS,
+                bookReviewData
+            );
 
-            await this.dynamoDBService.putItem(DynamoTables.BOOK_REVIEWS, item);
-
-            return item;
+            return bookReviewData;
         } catch (error) {
             throw new Error(`Failed to create the review: ${error.message}`);
         }

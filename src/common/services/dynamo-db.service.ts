@@ -4,9 +4,13 @@ import {
     DynamoDBDocumentClient,
     GetCommand,
     PutCommand,
+    UpdateCommand,
 } from '@aws-sdk/lib-dynamodb';
 import { getDynamoDBClient } from '@config/aws.dynamo-db-client';
 import { DynamoTables } from '@common/enums/dynamo-tables.enum';
+import { dynamodbConditionalErrorHandle } from '@common/errors/dynamodb-conditional-error-handle.util';
+import { toUpdateCommandInput } from '@common/utils/toUpdateCommandInput';
+import { UpdateDynamodbItemInput } from '@common/types/update-dynamodb-item-input.type';
 
 @Injectable()
 export class DynamoDBService implements OnModuleInit {
@@ -40,6 +44,20 @@ export class DynamoDBService implements OnModuleInit {
     ): Promise<void> {
         const params = { TableName: tableName, Item: item };
         await this.dynamoDBClient.send(new PutCommand(params));
+    }
+
+    async updateItem(input: UpdateDynamodbItemInput): Promise<any> {
+        try {
+            const params = toUpdateCommandInput(input);
+
+            const result = await this.dynamoDBClient.send(
+                new UpdateCommand(params)
+            );
+
+            return result.Attributes;
+        } catch (error) {
+            dynamodbConditionalErrorHandle(error);
+        }
     }
 
     private async testConnection(): Promise<void> {

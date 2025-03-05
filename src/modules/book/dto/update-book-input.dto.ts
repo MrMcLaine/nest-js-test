@@ -1,5 +1,5 @@
 import { InputType, Field, PartialType, Int } from '@nestjs/graphql';
-import { IsUUID, IsNotEmpty, IsInt } from 'class-validator';
+import { IsNotEmpty, IsInt } from 'class-validator';
 import { CreateBookInput } from '@book/dto/create-book-input.dto';
 
 @InputType()

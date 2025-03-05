@@ -1,10 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { DynamoDBService } from '@common/services/dynamo-db.service';
 import { DynamoTables } from '@common/enums/dynamo-tables.enum';
+import { toBookReview } from './utils/toBookReview';
+import { toUpdateDynamodbItemInputByReview } from './utils/toUpdateDynamodbItemInputByReview';
+import { checkBookReviewOwner } from './utils/check-book-review-owner.util';
 import { CreateBookReviewInput } from './dto/create-book-review-input.dto';
 import { BookReviewDto } from './dto/book-review.dto';
-import { generateReviewId } from './utils/generateBookReviewId';
-import { toBookReview } from './utils/toBookReview';
+import { UpdateBookReviewInput } from './dto/update-book-review-input.dto';
 
 @Injectable()
 export class BookReviewsService {
@@ -25,6 +27,31 @@ export class BookReviewsService {
             return bookReviewData;
         } catch (error) {
             throw new Error(`Failed to create the review: ${error.message}`);
+        }
+    }
+
+    async updateBookReview(
+        data: UpdateBookReviewInput,
+        userId: number
+    ): Promise<BookReviewDto> {
+        try {
+            checkBookReviewOwner({ userId, reviewId: data.reviewId });
+
+            return await this.dynamoDBService.updateItem(
+                toUpdateDynamodbItemInputByReview(data)
+            );
+        } catch (error) {
+            throw new Error(`Failed to update the review: ${error.message}`);
+        }
+    }
+
+    async deleteBookReview(reviewId: string, userId: number): Promise<string> {
+        try {
+            //TODO add the logic for delete item
+
+            return `Review with ID ${reviewId} deleted successfully`;
+        } catch (error) {
+            throw new Error(`Failed to delete the review: ${error.message}`);
         }
     }
 }

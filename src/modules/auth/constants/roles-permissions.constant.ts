@@ -6,10 +6,20 @@ export const RolePermissions: Record<UserRole, UserActionPermissions[]> = {
         UserActionPermissions.CREATE_BOOK,
         UserActionPermissions.UPDATE_BOOK,
         UserActionPermissions.DELETE_BOOK,
+        UserActionPermissions.CREATE_BOOK_REVIEW,
+        UserActionPermissions.UPDATE_BOOK_REVIEW,
+        UserActionPermissions.DELETE_BOOK_REVIEW,
     ],
     [UserRole.MODERATOR]: [
         UserActionPermissions.CREATE_BOOK,
         UserActionPermissions.UPDATE_BOOK,
+        UserActionPermissions.CREATE_BOOK_REVIEW,
+        UserActionPermissions.UPDATE_BOOK_REVIEW,
+        UserActionPermissions.DELETE_BOOK_REVIEW,
     ],
-    [UserRole.USER]: [],
+    [UserRole.USER]: [
+        UserActionPermissions.CREATE_BOOK_REVIEW,
+        UserActionPermissions.UPDATE_BOOK_REVIEW,
+        UserActionPermissions.DELETE_BOOK_REVIEW,
+    ],
 };

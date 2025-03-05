@@ -15,11 +15,26 @@ type BookDto {
   title: String!
 }
 
+type BookReviewDto {
+  bookId: Float!
+  createdAt: String!
+  rating: Int!
+  reviewId: String!
+  reviewText: String
+  userId: Float!
+}
+
 input CreateBookInput {
   author: String!
   description: String
   publicationYear: Int!
   title: String!
+}
+
+input CreateBookReviewInput {
+  bookId: Int!
+  rating: Int!
+  reviewText: String
 }
 
 input GetBooksInput {
@@ -44,6 +59,7 @@ input LoginAuthInput {
 
 type Mutation {
   createBook(data: CreateBookInput!): BookDto!
+  createBookReview(data: CreateBookReviewInput!): BookReviewDto!
   deleteBook(id: Float!): String!
   login(data: LoginAuthInput!): AuthResponse!
   registerUser(data: RegisterUserInput!): AuthResponse!

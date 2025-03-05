@@ -1,5 +1,8 @@
 import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
-import { ListTablesCommand } from '@aws-sdk/client-dynamodb';
+import {
+    CreateTableCommand,
+    ListTablesCommand,
+} from '@aws-sdk/client-dynamodb';
 import {
     DeleteCommand,
     DynamoDBDocumentClient,
@@ -9,7 +12,8 @@ import {
     ScanCommand,
     UpdateCommand,
 } from '@aws-sdk/lib-dynamodb';
-import { getDynamoDBClient } from '@config/aws.dynamo-db-client';
+import { getDynamoDBClient } from '@config/dynamoDB/aws.dynamo-db-client';
+import { dynamoDbTableInitParams } from '@config/dynamoDB/dynamo-db-table-init-params';
 import { DynamoTables } from '@common/enums/dynamo-tables.enum';
 import { dynamodbConditionalErrorHandle } from '@common/errors/dynamodb-conditional-error-handle.util';
 import { toUpdateCommandInput } from '@common/utils/toUpdateCommandInput';
@@ -28,6 +32,8 @@ export class DynamoDBService implements OnModuleInit {
     async onModuleInit() {
         try {
             await this.testConnection();
+            await this.createTable('userActivityLogs');
+            await this.createTable('bookReviews');
             this.logger.log('✅ Successfully connected to DynamoDB');
         } catch (error) {
             this.logger.error('❌ Failed to connect to DynamoDB', error);
@@ -47,21 +53,12 @@ export class DynamoDBService implements OnModuleInit {
         key: Record<string, any>
     ): Promise<T[]> {
         try {
-            const partitionKey = 'id';
-
-            if (!key[partitionKey]) {
-                console.warn(
-                    `Query skipped - missing partition key: ${partitionKey}`
-                );
-
-                return [];
-            }
-
             const params: QueryCommandInput = {
                 TableName: tableName,
-                KeyConditionExpression: `${partitionKey} = :pk`,
+                IndexName: 'UserIdIndex',
+                KeyConditionExpression: 'userId = :userId',
                 ExpressionAttributeValues: {
-                    ':pk': key[partitionKey],
+                    ':userId': key.userId,
                 },
             };
 
@@ -122,6 +119,24 @@ export class DynamoDBService implements OnModuleInit {
             await this.dynamoDBClient.send(new DeleteCommand(params));
         } catch (error) {
             throw new Error(`Failed to delete item: ${error.message}`);
+        }
+    }
+
+    private async createTable(
+        tableKey: keyof typeof dynamoDbTableInitParams
+    ): Promise<void> {
+        try {
+            const params = dynamoDbTableInitParams[tableKey];
+            await this.dynamoDBClient.send(new CreateTableCommand(params));
+            console.log(`✅ Table '${params.TableName}' created successfully`);
+        } catch (error) {
+            if (error.name === 'ResourceInUseException') {
+                console.log(`⚠️ Table '${tableKey}' already exists.`);
+            } else {
+                console.error(
+                    `❌ Failed to create table '${tableKey}': ${error.message}`
+                );
+            }
         }
     }
 

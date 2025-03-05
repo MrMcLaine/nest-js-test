@@ -110,12 +110,8 @@ input UpdateBookReviewInput {
 }
 
 type UserActivityLogDto {
-  requestBody: String
-  requestMethod: String!
-  requestParams: String
-  requestQuery: String
-  requestUrl: String!
-  timestamp: String!
+  date: String!
+  operationName: String!
   userId: Float!
 }
 

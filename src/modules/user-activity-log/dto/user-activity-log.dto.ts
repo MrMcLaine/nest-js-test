@@ -7,20 +7,8 @@ export class UserActivityLogDto implements UserActivityLog {
     userId: number;
 
     @Field()
-    timestamp: string;
+    date: string;
 
     @Field()
-    requestMethod: string;
-
-    @Field()
-    requestUrl: string;
-
-    @Field({ nullable: true })
-    requestBody?: string;
-
-    @Field({ nullable: true })
-    requestParams?: string;
-
-    @Field({ nullable: true })
-    requestQuery?: string;
+    operationName: string;
 }

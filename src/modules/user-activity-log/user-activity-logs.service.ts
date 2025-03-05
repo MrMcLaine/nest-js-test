@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { DynamoDBService } from '@common/services/dynamo-db.service';
 import { DynamoTables } from '@common/enums/dynamo-tables.enum';
+import { DynamoDBService } from '../dynamodb/dynamodb.service';
 import { UserActivityLogDto } from './dto/user-activity-log.dto';
 import { UserActivityLog } from './types/user-activity-log.type';
 

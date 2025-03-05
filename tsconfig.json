@@ -23,6 +23,7 @@
       "@config/*": ["src/config/*"],
       "@auth/*": ["src/modules/auth/*"],
       "@book/*": ["src/modules/book/*"],
+      "@dynamodb/*": ["src/modules/dynamodb/*"],
       "@user/*": ["src/modules/user/*"]
     }
   }

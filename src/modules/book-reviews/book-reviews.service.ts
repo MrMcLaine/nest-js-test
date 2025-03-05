@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { DynamoDBService } from '@common/services/dynamo-db.service';
 import { DynamoTables } from '@common/enums/dynamo-tables.enum';
+import { DynamoDBService } from '../dynamodb/dynamodb.service';
 import { toBookReview } from './utils/toBookReview';
 import { toUpdateDynamodbItemInputByReview } from './utils/toUpdateDynamodbItemInputByReview';
 import { checkBookReviewOwner } from './utils/check-book-review-owner.util';

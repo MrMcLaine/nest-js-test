@@ -8,6 +8,7 @@ import { postgresSqlConfig } from '@config/postgresSqlConfig';
 import { UserModule } from '@user/user.module';
 import { AuthModule } from '@auth/auth.module';
 import { BookModule } from '@book/book.module';
+import { DynamoDBService } from '@common/services/dynamo-db.service';
 
 @Module({
     imports: [
@@ -18,6 +19,6 @@ import { BookModule } from '@book/book.module';
         BookModule,
     ],
     controllers: [AppController],
-    providers: [AppService],
+    providers: [AppService, DynamoDBService],
 })
 export class AppModule {}

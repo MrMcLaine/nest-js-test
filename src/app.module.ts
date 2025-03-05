@@ -1,11 +1,13 @@
 import { Module } from '@nestjs/common';
 import { GraphQLModule } from '@nestjs/graphql';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { CacheModule } from '@nestjs/cache-manager';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { DynamoDBService } from '@common/services/dynamo-db.service';
 import { graphqlConfig } from '@config/graphql.config';
 import { postgresSqlConfig } from '@config/postgresSqlConfig';
+import { redisConfig } from '@config/redis.config';
 import { UserModule } from '@user/user.module';
 import { AuthModule } from '@auth/auth.module';
 import { BookModule } from '@book/book.module';
@@ -16,6 +18,7 @@ import { UserActivityLogsModule } from './modules/user-activity-log/user-activit
     imports: [
         GraphQLModule.forRoot(graphqlConfig),
         TypeOrmModule.forRoot(postgresSqlConfig),
+        CacheModule.register(redisConfig),
         AuthModule,
         UserModule,
         BookModule,

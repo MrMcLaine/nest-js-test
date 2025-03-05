@@ -7,11 +7,6 @@ import { AuthResponse } from '@user/dto/auth-response.dto';
 export class UserResolver {
     constructor(private readonly userService: UserService) {}
 
-    @Query(() => String)
-    sayHello(): string {
-        return 'Hello, GraphQL!';
-    }
-
     @Mutation(() => AuthResponse)
     async registerUser(
         @Args('data') data: RegisterUserInput

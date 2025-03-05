@@ -72,7 +72,6 @@ type Query {
   getAllBookReviews: [BookReviewDto!]!
   getBooks(filters: GetBooksInput): GetBooksResponseDto!
   getUserActivityLogs(userId: Float!): [UserActivityLogDto!]!
-  sayHello: String!
 }
 
 input RegisterUserInput {

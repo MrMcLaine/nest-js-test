@@ -121,5 +121,17 @@ npm run start:prod
 - ✅ Environment Variables (Secrets stored securely)
 
 ### 📡 API Endpoints
-//TODO add api endpoints
 
+1. Run the magidoc CLI preview
+
+```sh
+npx @magidoc/cli@latest preview
+```
+
+2. Click from your terminal to link for redirect to the webSite with the documentation
+By default -> Server listening on http://localhost:4000
+
+3. For update docs run the app and also run that script 
+```sh
+npx @magidoc/cli@latest generate
+```

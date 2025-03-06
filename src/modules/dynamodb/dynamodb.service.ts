@@ -7,7 +7,6 @@ import {
 import {
     DeleteCommand,
     DynamoDBDocumentClient,
-    GetCommand,
     PutCommand,
     QueryCommand,
     ScanCommand,
@@ -41,14 +40,6 @@ export class DynamoDBService implements OnModuleInit {
         } catch (error) {
             this.logger.error('❌ Failed to connect to DynamoDB', error);
         }
-    }
-
-    async getItem(
-        tableName: DynamoTables,
-        key: Record<string, any>
-    ): Promise<any> {
-        const params = { TableName: tableName, Key: key };
-        return this.dynamoDBClient.send(new GetCommand(params));
     }
 
     async queryTable<T>(

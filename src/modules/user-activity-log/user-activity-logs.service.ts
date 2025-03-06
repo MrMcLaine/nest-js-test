@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { DynamoTables } from '@common/enums/dynamo-tables.enum';
-import { DynamoDBService } from '../dynamodb/dynamodb.service';
+import { DynamoDBService } from '@dynamodb/dynamodb.service';
 import { UserActivityLogDto } from './dto/user-activity-log.dto';
 import { UserActivityLog } from './types/user-activity-log.type';
 
@@ -10,14 +10,10 @@ export class UserActivityLogsService {
 
     async getUserActivityLogs(userId: number): Promise<UserActivityLogDto[]> {
         try {
-            const t = await this.dynamoDBService.queryTable<UserActivityLogDto>(
+            return await this.dynamoDBService.queryTable<UserActivityLogDto>(
                 DynamoTables.USER_ACTIVITY_LOGS,
                 { userId }
             );
-
-            console.log('t', t);
-
-            return t;
         } catch (error) {
             throw new Error(
                 `Failed to get user activity logs: ${error.message}`

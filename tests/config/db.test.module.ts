@@ -12,6 +12,8 @@ import { RedisService } from '@redis/redis.service';
 import { AuthService } from '@auth/auth.service';
 import { JwtStrategy } from '@auth/jwt.strategy';
 import { testToken } from '../auth/auth.test-data';
+import { DynamoDBService } from '@dynamodb/dynamodb.service';
+import { BookReviewsService } from '@book-reviews/book-reviews.service';
 
 export const createTestModule = async (): Promise<TestingModule> => {
     return await Test.createTestingModule({
@@ -34,6 +36,7 @@ export const createTestModule = async (): Promise<TestingModule> => {
             AuthService,
             UserService,
             JwtStrategy,
+            BookReviewsService,
             {
                 provide: JwtService,
                 useValue: {
@@ -58,6 +61,9 @@ export const createTestModule = async (): Promise<TestingModule> => {
                     getBookPagesCache: jest.fn(),
                     setBookPagesCache: jest.fn(),
                     clearAllBookPagesCache: jest.fn(),
+                    getAllBookReviewsFromCache: jest.fn(),
+                    setAllBookReviewsToCache: jest.fn(),
+                    deleteAllBookReviewsCache: jest.fn(),
                 },
             },
             {
@@ -66,6 +72,15 @@ export const createTestModule = async (): Promise<TestingModule> => {
                     hashPassword: jest
                         .fn()
                         .mockResolvedValue('hashed-password'),
+                },
+            },
+            {
+                provide: DynamoDBService,
+                useValue: {
+                    scanTable: jest.fn(),
+                    putItem: jest.fn(),
+                    updateItem: jest.fn(),
+                    deleteItem: jest.fn(),
                 },
             },
         ],

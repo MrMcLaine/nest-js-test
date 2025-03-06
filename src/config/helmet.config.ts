@@ -14,6 +14,7 @@ export const helmetConfig: HelmetOptions = {
             connectSrc: [
                 "'self'",
                 'http://localhost:5000',
+                'ws://localhost:5000',
             ],
         },
     },

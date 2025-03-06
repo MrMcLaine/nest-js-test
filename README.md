@@ -78,7 +78,14 @@ npm install
 npm run start:dev
 ```
 
-### The server will run at http://localhost:5000/graphql by default.
+#### 🖥️ The server will run at http://localhost:5000/graphql by default.
+
+---
+
+#### 🚀 For production mode (NODE_ENV=production):
+#### ❌ Apollo Sandbox will be disabled, and the GraphQL Playground will not be accessible.
+
+---
 
 ### ✅ Testing
 

@@ -3,8 +3,6 @@ import { GraphQLModule } from '@nestjs/graphql';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ThrottlerModule } from '@nestjs/throttler';
 import { ConfigModule } from '@nestjs/config';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { graphqlConfig } from '@config/graphql.config';
 import { configModuleOptions } from '@config/config-module-options.config';
 import { gqlThrottlerOptions } from '@config/gglThrottler/gql-throttler-options.config';
@@ -32,7 +30,6 @@ import { UserActivityLogsModule } from '@/user-activity-log/user-activity-logs.m
         DynamodbModule,
         RedisModule,
     ],
-    controllers: [AppController],
-    providers: [AppService, gqlThrottlerProviders],
+    providers: [gqlThrottlerProviders],
 })
 export class AppModule {}

@@ -1,4 +1,5 @@
-import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
+import { Inject, Injectable, Logger, OnModuleInit } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import {
     CreateTableCommand,
     ListTablesCommand,
@@ -12,21 +13,23 @@ import {
     ScanCommand,
     UpdateCommand,
 } from '@aws-sdk/lib-dynamodb';
+import { QueryCommandInput } from '@aws-sdk/lib-dynamodb/dist-types/commands/QueryCommand';
 import { getDynamoDBClient } from '@config/dynamoDB/aws.dynamo-db-client';
 import { dynamoDbTableInitParams } from '@config/dynamoDB/dynamo-db-table-init-params';
 import { DynamoTables } from '@common/enums/dynamo-tables.enum';
 import { dynamodbConditionalErrorHandle } from '@common/errors/dynamodb-conditional-error-handle.util';
 import { toUpdateCommandInput } from '@common/utils/toUpdateCommandInput';
 import { UpdateDynamodbItemInput } from '@common/types/update-dynamodb-item-input.type';
-import { QueryCommandInput } from '@aws-sdk/lib-dynamodb/dist-types/commands/QueryCommand';
 
 @Injectable()
 export class DynamoDBService implements OnModuleInit {
     private readonly logger = new Logger(DynamoDBService.name);
     private dynamoDBClient: DynamoDBDocumentClient;
 
-    constructor() {
-        this.dynamoDBClient = DynamoDBDocumentClient.from(getDynamoDBClient);
+    constructor(
+        @Inject(ConfigService) private readonly configService: ConfigService
+    ) {
+        this.dynamoDBClient = getDynamoDBClient(this.configService);
     }
 
     async onModuleInit() {

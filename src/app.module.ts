@@ -2,12 +2,14 @@ import { Module } from '@nestjs/common';
 import { GraphQLModule } from '@nestjs/graphql';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ThrottlerModule } from '@nestjs/throttler';
+import { ConfigModule } from '@nestjs/config';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { graphqlConfig } from '@config/graphql.config';
-import { postgresSqlConfig } from '@config/postgresSqlConfig';
+import { configModuleOptions } from '@config/config-module-options.config';
 import { gqlThrottlerOptions } from '@config/gglThrottler/gql-throttler-options.config';
 import { gqlThrottlerProviders } from '@config/gglThrottler/gql-throttler-providers.config';
+import { typeOrmConfig } from '@config/typeorm.config';
 import { DynamodbModule } from '@dynamodb/dynamodb.module';
 import { UserModule } from '@user/user.module';
 import { AuthModule } from '@auth/auth.module';
@@ -18,8 +20,9 @@ import { UserActivityLogsModule } from '@/user-activity-log/user-activity-logs.m
 
 @Module({
     imports: [
+        ConfigModule.forRoot(configModuleOptions),
         GraphQLModule.forRoot(graphqlConfig),
-        TypeOrmModule.forRoot(postgresSqlConfig),
+        TypeOrmModule.forRootAsync(typeOrmConfig),
         ThrottlerModule.forRoot(gqlThrottlerOptions),
         AuthModule,
         UserModule,

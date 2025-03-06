@@ -10,3 +10,5 @@ export const mockLoginInput: LoginAuthInput = {
     email: 'invalid@example.com',
     password: 'test-password',
 };
+
+export const testToken = 'mocked-jwt-token'

@@ -14,6 +14,7 @@ import { JwtStrategy } from '@auth/jwt.strategy';
 import { testToken } from '../auth/auth.test-data';
 import { DynamoDBService } from '@dynamodb/dynamodb.service';
 import { BookReviewsService } from '@book-reviews/book-reviews.service';
+import { UserActivityLogsService } from '@/user-activity-log/user-activity-logs.service';
 
 export const createTestModule = async (): Promise<TestingModule> => {
     return await Test.createTestingModule({
@@ -37,6 +38,7 @@ export const createTestModule = async (): Promise<TestingModule> => {
             UserService,
             JwtStrategy,
             BookReviewsService,
+            UserActivityLogsService,
             {
                 provide: JwtService,
                 useValue: {
@@ -77,6 +79,7 @@ export const createTestModule = async (): Promise<TestingModule> => {
             {
                 provide: DynamoDBService,
                 useValue: {
+                    queryTable: jest.fn(),
                     scanTable: jest.fn(),
                     putItem: jest.fn(),
                     updateItem: jest.fn(),

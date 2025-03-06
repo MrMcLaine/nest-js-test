@@ -5,4 +5,5 @@ export const userServiceMock = {
     useValue: {
         findByEmailWithCheck: jest.fn(),
     },
+
 };

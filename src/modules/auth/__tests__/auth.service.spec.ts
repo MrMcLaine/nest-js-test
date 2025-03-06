@@ -10,8 +10,8 @@ import { userServiceMock } from '../../../test-utils/mocks/user-service.mock';
 import {
     mockInvalidLoginInput,
     mockLoginInput,
-    mockUser,
 } from '@auth/__tests__/auth.test-data';
+import { mockUser } from '@user/__tests__/user.test-data';
 
 describe('AuthService', () => {
     let authService: AuthService;

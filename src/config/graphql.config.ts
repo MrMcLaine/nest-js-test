@@ -14,9 +14,7 @@ export const graphqlConfig: ApolloDriverConfig = {
     playground: false,
     plugins: [ApolloServerPluginLandingPageLocalDefault()],
 
-    context: ({ req }) => {
-        const token = req.headers.authorization || '';
-
-        return { token };
+    context: ({ req, res }) => {
+        return { req, res, token: req.headers.authorization || '' };
     },
 };

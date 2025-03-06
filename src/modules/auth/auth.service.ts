@@ -1,12 +1,12 @@
 import { forwardRef, Inject, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
+import { BcryptUtil } from '@common/utils/bcrypt.util';
 import { UserService } from '@user/user.service';
 import { UserDto } from '@user/dto/user-dto';
 import { AuthResponse } from '@user/dto/auth-response.dto';
 import { toUserDto } from '@user/utils/toUserDto';
 import { toJwtPayload } from '@auth/utils/toJwtPayload';
 import { LoginAuthInput } from '@auth/dto/login-auth.input';
-import { BcryptUtil } from '@common/utils/bcrypt.util';
 
 @Injectable()
 export class AuthService {

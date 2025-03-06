@@ -1,10 +1,10 @@
 import { TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { createTestModule } from './config/db.test.module';
+import { createTestModule } from '../config/db.test.module';
 import { Book } from '@book/book.entity';
 import { BookService } from '@book/book.service';
-import { bookTestData } from './books/book.test-data';
+import { bookTestData } from './book.test-data';
 
 describe('BookService (Integration)', () => {
     let bookService: BookService;

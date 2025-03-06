@@ -1,8 +1,12 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { JwtService } from '@nestjs/jwt';
 import { Book } from '@book/book.entity';
+import { User } from '@user/user.entity';
+import { UserService } from '@user/user.service';
 import { BookService } from '@book/book.service';
 import { RedisService } from '@redis/redis.service';
+import { AuthService } from '@auth/auth.service';
 
 export const createTestModule = async (): Promise<TestingModule> => {
     return await Test.createTestingModule({
@@ -10,13 +14,16 @@ export const createTestModule = async (): Promise<TestingModule> => {
             TypeOrmModule.forRoot({
                 type: 'sqlite',
                 database: ':memory:',
-                entities: [Book],
+                entities: [Book, User],
                 synchronize: true,
             }),
-            TypeOrmModule.forFeature([Book]),
+            TypeOrmModule.forFeature([Book, User]),
         ],
         providers: [
             BookService,
+            AuthService,
+            UserService,
+            JwtService,
             {
                 provide: RedisService,
                 useValue: {

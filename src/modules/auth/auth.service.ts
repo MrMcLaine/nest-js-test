@@ -30,9 +30,11 @@ export class AuthService {
             throw new Error('Invalid email or password');
         }
 
+        const userDto = toUserDto(user);
+
         return {
-            user: toUserDto(user),
-            token: this.generateToken(toUserDto(user)),
+            user: userDto,
+            token: this.generateToken(userDto),
         };
     }
 }

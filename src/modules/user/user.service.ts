@@ -36,9 +36,11 @@ export class UserService {
                 toCreateUserData(hashedPassword, input)
             );
 
+            const userDto = toUserDto(user);
+
             return {
-                user: toUserDto(user),
-                token: this.authService.generateToken(toUserDto(user)),
+                user: userDto,
+                token: this.authService.generateToken(userDto),
             };
         } catch (error) {
             throw new Error(`Failed to create user: ${error.message}`);

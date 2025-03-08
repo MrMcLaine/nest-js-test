@@ -29,8 +29,7 @@ export const getBookFilters = (
         filters.sortField &&
         ['title', 'author', 'publicationYear'].includes(filters.sortField)
     ) {
-        const order = filters.sortOrder === 'DESC' ? 'DESC' : 'ASC';
-        queryBuilder.orderBy(`book.${filters.sortField}`, order);
+        queryBuilder.orderBy(`book.${filters.sortField}`, filters.sortOrder);
     }
 
     const { limit, offset } = getLimitOffset(filters);

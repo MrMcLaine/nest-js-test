@@ -2,6 +2,7 @@ import { SelectQueryBuilder } from 'typeorm';
 import { Book } from '@book/book.entity';
 import { getLimitOffset } from '@book/utils/getLimitOffset';
 import { GetBooksInput } from '@book/dto/get-books-input.dto';
+import { SortOrder } from '@common/enums/sort-order.enum';
 
 export const getBookFilters = (
     queryBuilder: SelectQueryBuilder<Book>,
@@ -25,11 +26,11 @@ export const getBookFilters = (
         });
     }
 
-    if (
-        filters.sortField &&
-        ['title', 'author', 'publicationYear'].includes(filters.sortField)
-    ) {
-        queryBuilder.orderBy(`book.${filters.sortField}`, filters.sortOrder);
+    if (filters.sortField) {
+        queryBuilder.orderBy(
+            `book.${filters.sortField}`,
+            filters.sortOrder ?? SortOrder.ASC
+        );
     }
 
     const { limit, offset } = getLimitOffset(filters);

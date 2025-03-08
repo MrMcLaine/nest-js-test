@@ -2,9 +2,9 @@ import { Injectable } from '@nestjs/common';
 import { DynamoTables } from '@common/enums/dynamo-tables.enum';
 import { DynamoDBService } from '@dynamodb/dynamodb.service';
 import { RedisService } from '@redis/redis.service';
-import { toBookReview } from './utils/toBookReview';
+import { transformBookReviewToDto } from './utils/transformBookReviewToDto';
 import { toUpdateDynamodbItemInputByReview } from '@book-reviews/utils/toUpdateDynamodbItemInputByReview';
-import { extractUserIdFromReviewId } from '@book-reviews/utils/getUserIdFromReviewId';
+import { extractUserIdFromReviewId } from '@book-reviews/utils/extractUserIdFromReviewId';
 import { CreateBookReviewInput } from './dto/create-book-review-input.dto';
 import { BookReviewDto } from './dto/book-review.dto';
 import { UpdateBookReviewInput } from './dto/update-book-review-input.dto';
@@ -43,7 +43,7 @@ export class BookReviewsService {
         userId: number
     ): Promise<BookReviewDto> {
         try {
-            const bookReviewData = toBookReview(userId, data);
+            const bookReviewData = transformBookReviewToDto(userId, data);
             await this.dynamoDBService.putItem(
                 DynamoTables.BOOK_REVIEWS,
                 bookReviewData

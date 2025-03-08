@@ -17,7 +17,7 @@ import { getDynamoDBClient } from '@config/dynamoDB/aws.dynamo-db-client';
 import { dynamoDbTableInitParams } from '@config/dynamoDB/dynamo-db-table-init-params';
 import { DynamoTables } from '@common/enums/dynamo-tables.enum';
 import { dynamodbConditionalErrorHandle } from '@common/errors/dynamodb-conditional-error-handle.util';
-import { toUpdateCommandInput } from '@common/utils/toUpdateCommandInput';
+import { convertToUpdateCommandInput } from '@common/utils/convertToUpdateCommandInput';
 import { UpdateDynamodbItemInput } from '@common/types/update-dynamodb-item-input.type';
 
 @Injectable()
@@ -92,7 +92,7 @@ export class DynamoDBService implements OnModuleInit {
 
     async updateItem(input: UpdateDynamodbItemInput): Promise<any> {
         try {
-            const params = toUpdateCommandInput(input);
+            const params = convertToUpdateCommandInput(input);
 
             const result = await this.dynamoDBClient.send(
                 new UpdateCommand(params)

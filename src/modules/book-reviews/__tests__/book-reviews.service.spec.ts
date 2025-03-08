@@ -5,7 +5,7 @@ import { RedisService } from '@redis/redis.service';
 import { mockUser } from '@user/__tests__/user.test-data';
 import { BookReviewsService } from '@book-reviews/book-reviews.service';
 import { checkBookReviewOwner } from '@book-reviews/utils/check-book-review-owner.util';
-import * as bookReviewUtils from '@book-reviews/utils/toBookReview';
+import * as bookReviewUtils from '@book-reviews/utils/transformBookReviewToDto';
 import * as updateUtils from '@book-reviews/utils/toUpdateDynamodbItemInputByReview';
 import {
     createBookReviewInput_1,
@@ -89,7 +89,7 @@ describe('BookReviewsService', () => {
                 'deleteAllBookReviewsCache'
             ).mockResolvedValue(undefined);
             jest.spyOn(dynamoDBService, 'putItem').mockResolvedValue(undefined);
-            jest.spyOn(bookReviewUtils, 'toBookReview').mockReturnValue(
+            jest.spyOn(bookReviewUtils, 'transformBookReviewToDto').mockReturnValue(
                 mockReview
             );
 

@@ -4,9 +4,9 @@ import { Repository } from 'typeorm';
 import { checkAffectedRows } from '@common/errors/check-affected.util';
 import { RedisService } from '@redis/redis.service';
 import { Book } from '@book/book.entity';
-import { toBookDto } from '@book/utils/toBookDto';
-import { getBookFilters } from '@book/utils/getBooksFilter';
-import { getHasMore } from '@book/utils/getHasMore';
+import { transformBookToDto } from '@book/utils/transformBookToDto';
+import { buildBookQuery } from '@book/utils/buildBookQuery';
+import { calculatePagination } from '@book/utils/calculatePagination';
 import { isCacheable } from '@book/utils/isCacheable';
 import { CreateBookInput } from '@book/dto/create-book-input.dto';
 import { BookDto } from '@book/dto/book-dto';
@@ -34,12 +34,12 @@ export class BookService {
             }
 
             let queryBuilder = this.bookRepository.createQueryBuilder('book');
-            queryBuilder = getBookFilters(queryBuilder, input);
+            queryBuilder = buildBookQuery(queryBuilder, input);
 
             const books = await queryBuilder.getMany();
-            const { hasMore, data } = getHasMore(books, input);
+            const { hasMore, data } = calculatePagination(books, input);
 
-            const bookDtos = data.map(toBookDto);
+            const bookDtos = data.map(transformBookToDto);
             const response: GetBooksResponseDto = { books: bookDtos, hasMore };
 
             if (isCacheable(input))
@@ -58,7 +58,7 @@ export class BookService {
 
             await this.redisService.clearAllBookPagesCache();
 
-            return toBookDto(savedBook);
+            return transformBookToDto(savedBook);
         } catch (error) {
             throw new Error(`Failed to create book: ${error.message}`);
         }
@@ -84,7 +84,7 @@ export class BookService {
 
             await this.redisService.clearAllBookPagesCache();
 
-            return toBookDto(result.raw[0]);
+            return transformBookToDto(result.raw[0]);
         } catch (error) {
             throw new Error(`Failed to update book: ${error.message}`);
         }

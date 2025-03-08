@@ -4,8 +4,8 @@ import { BcryptUtil } from '@common/utils/bcrypt.util';
 import { UserService } from '@user/user.service';
 import { UserDto } from '@user/dto/user-dto';
 import { AuthResponse } from '@user/dto/auth-response.dto';
-import { toUserDto } from '@user/utils/toUserDto';
-import { toJwtPayload } from '@auth/utils/toJwtPayload';
+import { transformUserToDto } from '@user/utils/transformUserToDto';
+import { convertToJwtPayload } from '@auth/utils/convertToJwtPayload';
 import { LoginAuthInput } from '@auth/dto/login-auth.input';
 
 @Injectable()
@@ -17,7 +17,7 @@ export class AuthService {
     ) {}
 
     generateToken(user: UserDto): string {
-        return this.jwtService.sign(toJwtPayload(user));
+        return this.jwtService.sign(convertToJwtPayload(user));
     }
 
     async login(input: LoginAuthInput): Promise<AuthResponse> {
@@ -30,7 +30,7 @@ export class AuthService {
             throw new Error('Invalid email or password');
         }
 
-        const userDto = toUserDto(user);
+        const userDto = transformUserToDto(user);
 
         return {
             user: userDto,

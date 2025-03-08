@@ -1,10 +1,10 @@
 import { SelectQueryBuilder } from 'typeorm';
 import { Book } from '@book/book.entity';
-import { getLimitOffset } from '@book/utils/getLimitOffset';
+import { calculatePaginationParams } from '@book/utils/calculatePaginationParams';
 import { GetBooksInput } from '@book/dto/get-books-input.dto';
 import { SortOrder } from '@common/enums/sort-order.enum';
 
-export const getBookFilters = (
+export const buildBookQuery = (
     queryBuilder: SelectQueryBuilder<Book>,
     filters: GetBooksInput
 ): SelectQueryBuilder<Book> => {
@@ -33,7 +33,7 @@ export const getBookFilters = (
         );
     }
 
-    const { limit, offset } = getLimitOffset(filters);
+    const { limit, offset } = calculatePaginationParams(filters);
 
     queryBuilder.limit(limit + 1);
     queryBuilder.offset(offset);

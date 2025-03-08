@@ -1,7 +1,7 @@
 import { UpdateCommandInput } from '@aws-sdk/lib-dynamodb';
 import { UpdateDynamodbItemInput } from '@common/types/update-dynamodb-item-input.type';
 
-export const toUpdateCommandInput = (
+export const convertToUpdateCommandInput = (
     input: UpdateDynamodbItemInput
 ): UpdateCommandInput => {
     if (!Object.keys(input.updates).length) {

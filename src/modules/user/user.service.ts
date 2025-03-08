@@ -4,8 +4,8 @@ import { Repository } from 'typeorm';
 import { AuthService } from '@auth/auth.service';
 import { BcryptUtil } from '@common/utils/bcrypt.util';
 import { User } from '@user/user.entity';
-import { toCreateUserData } from '@user/utils/toCreateUserData';
-import { toUserDto } from '@user/utils/toUserDto';
+import { buildUserData } from '@user/utils/buildUserData';
+import { transformUserToDto } from '@user/utils/transformUserToDto';
 import { RegisterUserInput } from '@user/dto/register-user.input';
 import { AuthResponse } from '@user/dto/auth-response.dto';
 
@@ -33,10 +33,10 @@ export class UserService {
             );
 
             const user = await this.userRepository.save(
-                toCreateUserData(hashedPassword, input)
+                buildUserData(hashedPassword, input)
             );
 
-            const userDto = toUserDto(user);
+            const userDto = transformUserToDto(user);
 
             return {
                 user: userDto,

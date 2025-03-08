@@ -1,5 +1,5 @@
 import { Book } from '@book/book.entity';
-import { getLimitOffset } from '@book/utils/getLimitOffset';
+import { calculatePaginationParams } from '@book/utils/calculatePaginationParams';
 import { GetBooksInput } from '@book/dto/get-books-input.dto';
 
 interface GetHasMoreResponse {
@@ -7,11 +7,11 @@ interface GetHasMoreResponse {
     data: Book[];
 }
 
-export const getHasMore = (
+export const calculatePagination = (
     items: Book[],
     filters?: GetBooksInput
 ): GetHasMoreResponse => {
-    const { limit } = getLimitOffset(filters);
+    const { limit } = calculatePaginationParams(filters);
 
     const hasMore = items.length > limit;
     const data = hasMore ? items.slice(0, limit) : items;

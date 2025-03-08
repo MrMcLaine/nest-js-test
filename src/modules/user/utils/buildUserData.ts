@@ -2,7 +2,7 @@ import { RegisterUserInput } from '@user/dto/register-user.input';
 import { UserRole } from '@user/constants/user-role.enum';
 import { User } from '@user/user.entity';
 
-export const toCreateUserData = (
+export const buildUserData = (
     hashedPassword: string,
     data: RegisterUserInput
 ): Partial<User> => {

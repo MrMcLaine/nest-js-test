@@ -5,8 +5,8 @@ import { BcryptUtil } from '@common/utils/bcrypt.util';
 import { UserService } from '@user/user.service';
 import { User } from '@user/user.entity';
 import { AuthResponse } from '@user/dto/auth-response.dto';
-import { toUserDto } from '@user/utils/toUserDto';
-import { toCreateUserData } from '@user/utils/toCreateUserData';
+import { transformUserToDto } from '@user/utils/transformUserToDto';
+import { buildUserData } from '@user/utils/buildUserData';
 import { authServiceMock } from '../../../test-utils/mocks/auth-service.mock';
 import { getTokenMock } from '../../../test-utils/mocks/get-token.mock';
 import {
@@ -75,10 +75,10 @@ describe('UserService', () => {
             const result: AuthResponse =
                 await userService.createUser(registerInput);
 
-            expect(result.user).toEqual(toUserDto(mockUser));
+            expect(result.user).toEqual(transformUserToDto(mockUser));
             expect(result.token).toBe('mocked-jwt-token');
             expect(userRepository.save).toHaveBeenCalledWith(
-                toCreateUserData(hashedPassword, registerInput)
+                buildUserData(hashedPassword, registerInput)
             );
         });
 

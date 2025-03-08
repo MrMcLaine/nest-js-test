@@ -3,8 +3,8 @@ import { AuthService } from '@auth/auth.service';
 import { JwtService } from '@nestjs/jwt';
 import { UserService } from '@user/user.service';
 import { AuthResponse } from '@user/dto/auth-response.dto';
-import { toUserDto } from '@user/utils/toUserDto';
-import { toJwtPayload } from '@auth/utils/toJwtPayload';
+import { transformUserToDto } from '@user/utils/transformUserToDto';
+import { convertToJwtPayload } from '@auth/utils/convertToJwtPayload';
 import { jwtServiceMock } from '../../../test-utils/mocks/jwt-service.mock';
 import { userServiceMock } from '../../../test-utils/mocks/user-service.mock';
 import {
@@ -41,7 +41,7 @@ describe('AuthService', () => {
         const result: AuthResponse = await authService.login(mockLoginInput);
 
         expect(result).toEqual({
-            user: toUserDto(mockUser),
+            user: transformUserToDto(mockUser),
             token: 'mocked-jwt-token',
         });
 
@@ -49,7 +49,7 @@ describe('AuthService', () => {
             mockLoginInput.email
         );
         expect(jwtService.sign).toHaveBeenCalledWith(
-            toJwtPayload(toUserDto(mockUser))
+            convertToJwtPayload(transformUserToDto(mockUser))
         );
     });
 

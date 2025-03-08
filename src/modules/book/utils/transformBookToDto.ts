@@ -1,7 +1,7 @@
 import { Book } from '@book/book.entity';
 import { BookDto } from '@book/dto/book-dto';
 
-export const toBookDto = (book: Book): BookDto => {
+export const transformBookToDto = (book: Book): BookDto => {
     return {
         id: book.id,
         title: book.title,

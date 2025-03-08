@@ -6,7 +6,7 @@ interface LimitOffset {
     offset: number;
 }
 
-export const getLimitOffset = (input?: GetBooksInput): LimitOffset => {
+export const calculatePaginationParams = (input?: GetBooksInput): LimitOffset => {
     return {
         limit: input?.limit ?? DEFAULT_LIMIT_PER_PAGE,
         offset: input?.offset ?? 0,

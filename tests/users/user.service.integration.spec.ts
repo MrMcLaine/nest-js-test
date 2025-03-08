@@ -5,7 +5,7 @@ import { createTestModule } from '../config/db.test.module';
 import { UserService } from '@user/user.service';
 import { User } from '@user/user.entity';
 import { AuthResponse } from '@user/dto/auth-response.dto';
-import { toUserDto } from '@user/utils/toUserDto';
+import { transformUserToDto } from '@user/utils/transformUserToDto';
 import {
     mockUser,
     registerInput,
@@ -55,7 +55,7 @@ describe('UserService (Integration)', () => {
             });
 
             expect(userInDB).not.toBeNull();
-            expect(result.user).toEqual(toUserDto(userInDB));
+            expect(result.user).toEqual(transformUserToDto(userInDB));
             expect(result.token).toBe(testToken);
         });
 

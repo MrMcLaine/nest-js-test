@@ -2,7 +2,7 @@ import { generateReviewId } from './generateBookReviewId';
 import { CreateBookReviewInput } from '../dto/create-book-review-input.dto';
 import { BookReview } from '../types/book-review.type';
 
-export const toBookReview = (
+export const transformBookReviewToDto = (
     userId: number,
     data: CreateBookReviewInput
 ): BookReview => {

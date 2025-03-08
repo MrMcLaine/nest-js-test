@@ -3,7 +3,7 @@ import { DynamoTables } from '@common/enums/dynamo-tables.enum';
 import { DynamoDBService } from '@dynamodb/dynamodb.service';
 import { RedisService } from '@redis/redis.service';
 import { BookReviewsService } from '@book-reviews/book-reviews.service';
-import { toBookReview } from '@book-reviews/utils/toBookReview';
+import { transformBookReviewToDto } from '@book-reviews/utils/transformBookReviewToDto';
 import { toUpdateDynamodbItemInputByReview } from '@book-reviews/utils/toUpdateDynamodbItemInputByReview';
 import { createTestModule } from '../config/db.test.module';
 import {
@@ -65,7 +65,7 @@ describe('BookReviewsService (Integration)', () => {
 
     describe('createBookReview', () => {
         it('should create a new book review and store in DynamoDB', async () => {
-            const mockReview = toBookReview(mockUserId, createBookReviewInput);
+            const mockReview = transformBookReviewToDto(mockUserId, createBookReviewInput);
 
             jest.spyOn(dynamoDBService, 'putItem').mockResolvedValue();
 

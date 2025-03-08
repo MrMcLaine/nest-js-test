@@ -1,11 +1,11 @@
 import { CreateDateColumn, UpdateDateColumn } from 'typeorm';
 import { BaseDtoEntity } from './base.dto.entity';
-import { getDateType } from '@common/utils/getDateType';
+import { determineDatabaseDateType } from '@common/utils/determineDatabaseDateType';
 
 export abstract class BaseEntity extends BaseDtoEntity {
-    @CreateDateColumn({ type: getDateType() })
+    @CreateDateColumn({ type: determineDatabaseDateType() })
     createdAt: Date;
 
-    @UpdateDateColumn({ type: getDateType() })
+    @UpdateDateColumn({ type: determineDatabaseDateType() })
     updatedAt: Date;
 }

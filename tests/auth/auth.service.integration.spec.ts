@@ -7,7 +7,7 @@ import { createTestModule } from '../config/db.test.module';
 import { AuthService } from '@auth/auth.service';
 import { User } from '@user/user.entity';
 import { AuthResponse } from '@user/dto/auth-response.dto';
-import { toUserDto } from '@user/utils/toUserDto';
+import { transformUserToDto } from '@user/utils/transformUserToDto';
 import { mockLoginInput, UserData } from './auth.test-data';
 
 describe('AuthService (Integration)', () => {
@@ -42,7 +42,7 @@ describe('AuthService (Integration)', () => {
 
         const result: AuthResponse = await authService.login(UserData);
 
-        expect(result.user).toEqual(toUserDto(user));
+        expect(result.user).toEqual(transformUserToDto(user));
         expect(result.token).toBe('mocked-jwt-token');
     });
 

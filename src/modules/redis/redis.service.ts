@@ -5,7 +5,7 @@ import { GetBooksResponseDto } from '@book/dto/get-books-response.dto';
 import { RedisDefaultService } from './redis-default.service';
 import { REDIS_BOOKS_CACHE_TTL } from '@redis/redis-ttl.const';
 import { RedisKeyName } from './redis-key-name.enum';
-import { getBooksPageKey } from '@redis/utils/getBooksPageKey';
+import { generateBooksCacheKey } from '@redis/utils/generateBooksCacheKey';
 
 @Injectable()
 export class RedisService {
@@ -29,7 +29,7 @@ export class RedisService {
         input?: GetBooksInput
     ): Promise<GetBooksResponseDto | null> {
         try {
-            const key = getBooksPageKey(input);
+            const key = generateBooksCacheKey(input);
             await this.trackBookPageCache(key);
 
             return await this.redisDefaultService.get<GetBooksResponseDto>(key);
@@ -58,7 +58,7 @@ export class RedisService {
         input?: GetBooksInput
     ): Promise<void> {
         try {
-            const key = getBooksPageKey(input);
+            const key = generateBooksCacheKey(input);
             await this.redisDefaultService.set(
                 key,
                 response,

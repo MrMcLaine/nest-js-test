@@ -1,10 +1,9 @@
 import { Injectable } from '@nestjs/common';
-import { BookReviewDto } from '@book-reviews/dto/book-review.dto';
-import { GetBooksInput } from '@book/dto/get-books-input.dto';
-import { GetBooksResponseDto } from '@book/dto/get-books-response.dto';
-import { RedisDefaultService } from './redis-default.service';
+import { BookReviewDto } from '@book-reviews/dto';
+import { GetBooksInput, GetBooksResponseDto } from '@book/dto';
 import { REDIS_BOOKS_CACHE_TTL } from './redis-ttl.const';
 import { RedisKeyName } from './redis-key-name.enum';
+import { RedisDefaultService } from './redis-default.service';
 import { generateBooksCacheKey } from './utils/generateBooksCacheKey';
 
 @Injectable()

@@ -1,7 +1,7 @@
 import { InputType, Field, Int } from '@nestjs/graphql';
 import { IsOptional, IsString, IsInt, Min, IsEnum } from 'class-validator';
-import { SortOrder } from '@common/enums/sort-order.enum';
-import { SortField } from '@book/constants/sort-field.enum';
+import { SortOrder } from '@common/enums';
+import { SortField } from '@book/constants';
 
 @InputType()
 export class GetBooksInput {

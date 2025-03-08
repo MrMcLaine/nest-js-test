@@ -1,5 +1,5 @@
 import { ObjectType, Field } from '@nestjs/graphql';
-import { BookDto } from '@book/dto/book-dto';
+import { BookDto } from '@book/dto';
 
 @ObjectType()
 export class GetBooksResponseDto {

@@ -1,5 +1,5 @@
 import { ColumnOptions } from 'typeorm/decorator/options/ColumnOptions';
-import { UserRole } from '@user/constants/user-role.enum';
+import { UserRole } from '@user/constants';
 
 export const determineUserRoleColumnOptions = (): ColumnOptions => {
     return process.env.NODE_ENV === 'test'

@@ -2,7 +2,7 @@ import { ConfigService } from '@nestjs/config';
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { DynamoDBDocumentClient } from '@aws-sdk/lib-dynamodb';
 import { fromIni } from '@aws-sdk/credential-providers';
-import { EnvName } from '@common/enums/env-name.enum';
+import { EnvName } from '@common/enums';
 
 export const getDynamoDBClient = (configService: ConfigService) => {
     const isLocal =

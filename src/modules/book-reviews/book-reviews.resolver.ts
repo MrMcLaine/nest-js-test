@@ -1,14 +1,15 @@
-import {Args, Mutation, Resolver, Context, Query} from '@nestjs/graphql';
+import { Args, Mutation, Resolver, Context, Query } from '@nestjs/graphql';
 import { UseGuards } from '@nestjs/common';
-import { ContextNest } from '@common/types/context-nest.type';
-import { JwtAuthGuard } from '@auth/quards/jwt-auth.guard';
-import { AclGuard } from '@auth/quards/acl.guard';
-import { Permissions } from '@auth/utils/permissions.decorator';
-import { UserActionPermissions } from '@auth/constants/user-action-permissions.enum';
-import { BookReviewsService } from './book-reviews.service';
-import { CreateBookReviewInput } from './dto/create-book-review-input.dto';
-import { BookReviewDto } from './dto/book-review.dto';
-import { UpdateBookReviewInput } from './dto/update-book-review-input.dto';
+import { ContextNest } from '@common/types';
+import { JwtAuthGuard, AclGuard } from '@auth/quards';
+import { Permissions } from '@auth/utils';
+import { UserActionPermissions } from '@auth/constants';
+import { BookReviewsService } from '@book-reviews/book-reviews.service';
+import {
+    CreateBookReviewInput,
+    BookReviewDto,
+    UpdateBookReviewInput,
+} from '@book-reviews/dto';
 
 @Resolver()
 export class BookReviewsResolver {

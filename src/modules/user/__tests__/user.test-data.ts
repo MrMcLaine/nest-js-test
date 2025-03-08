@@ -1,6 +1,6 @@
 import { User } from '@user/user.entity';
 import { UserRole } from '@user/constants/user-role.enum';
-import { RegisterUserInput } from '@user/dto/register-user.input';
+import { RegisterUserInput } from '@auth/dto';
 
 export const mockUser: User = {
     id: '1',

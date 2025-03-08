@@ -4,7 +4,7 @@ import { DynamoDBService } from '../../src/providers/dynamodb/dynamodb.service';
 import { RedisService } from '../../src/providers/redis/redis.service';
 import { BookReviewsService } from '@book-reviews/book-reviews.service';
 import { transformBookReviewToDto } from '@book-reviews/utils/transformBookReviewToDto';
-import { toUpdateDynamodbItemInputByReview } from '@book-reviews/utils/toUpdateDynamodbItemInputByReview';
+import { transformToUpdateDynamodbItemInputByReview } from '@book-reviews/utils/transformToUpdateDynamodbItemInputByReview';
 import { createTestModule } from '../config/db.test.module';
 import {
     createBookReviewInput,
@@ -98,7 +98,7 @@ describe('BookReviewsService (Integration)', () => {
 
     describe('updateBookReview', () => {
         it('should update a book review successfully', async () => {
-            const mockUpdateInput = toUpdateDynamodbItemInputByReview(
+            const mockUpdateInput = transformToUpdateDynamodbItemInputByReview(
                 updateBookReviewInput
             );
             const updatedReview = { reviewId: '1', ...updateBookReviewInput };

@@ -1,9 +1,6 @@
 import { InputType, Field } from '@nestjs/graphql';
 import { IsEmail, IsNotEmpty, Length } from 'class-validator';
-import {
-    PASSWORD_MAX_LENGTH,
-    PASSWORD_MIN_LENGTH,
-} from '@user/constants/others';
+import { PASSWORD_MAX_LENGTH, PASSWORD_MIN_LENGTH } from '@user/constants';
 
 @InputType()
 export class LoginAuthInput {

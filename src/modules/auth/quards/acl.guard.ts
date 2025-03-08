@@ -6,9 +6,11 @@ import {
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { GqlExecutionContext } from '@nestjs/graphql';
-import { PERMISSIONS_KEY } from '@auth/constants/other.constants';
-import { RolePermissions } from '@auth/constants/roles-permissions.constant';
-import { UserActionPermissions } from '@auth/constants/user-action-permissions.enum';
+import {
+    PERMISSIONS_KEY,
+    RolePermissions,
+    UserActionPermissions,
+} from '@auth/constants';
 
 @Injectable()
 export class AclGuard implements CanActivate {

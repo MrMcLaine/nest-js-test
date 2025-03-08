@@ -37,9 +37,7 @@ describe('UserService', () => {
         it('should return a user if found', async () => {
             jest.spyOn(userRepository, 'findOneBy').mockResolvedValue(mockUser);
 
-            const result = await userService.findByEmail(
-                mockUser.email
-            );
+            const result = await userService.findByEmail(mockUser.email);
 
             expect(result).toEqual(mockUser);
             expect(userRepository.findOneBy).toHaveBeenCalledWith({

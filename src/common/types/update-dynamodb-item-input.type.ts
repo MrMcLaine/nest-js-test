@@ -1,4 +1,4 @@
-import { DynamoTables } from '@common/enums/dynamo-tables.enum';
+import { DynamoTables } from '@common/enums';
 
 export interface UpdateDynamodbItemInput {
     tableName: DynamoTables;

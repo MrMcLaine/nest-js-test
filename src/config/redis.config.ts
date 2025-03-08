@@ -1,7 +1,7 @@
 import { redisStore } from 'cache-manager-redis-store';
 import { CacheModuleOptions } from '@nestjs/cache-manager/dist/interfaces/cache-module.interface';
 import { ConfigService } from '@nestjs/config';
-import { EnvName } from '@common/enums/env-name.enum';
+import { EnvName } from '@common/enums';
 
 const REDIS_DEFAULT_TTL = 300;
 const REDIS_DEFAULT_LOCAL_PORT = 6379;

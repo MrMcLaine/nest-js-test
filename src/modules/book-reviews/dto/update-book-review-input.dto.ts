@@ -1,6 +1,6 @@
 import { InputType, Field, PartialType } from '@nestjs/graphql';
 import { IsNotEmpty, IsString } from 'class-validator';
-import { CreateBookReviewInput } from './create-book-review-input.dto';
+import { CreateBookReviewInput } from '@book-reviews/dto';
 
 @InputType()
 export class UpdateBookReviewInput extends PartialType(CreateBookReviewInput) {

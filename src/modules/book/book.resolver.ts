@@ -1,15 +1,16 @@
 import { Resolver, Mutation, Args, Query } from '@nestjs/graphql';
 import { UseGuards } from '@nestjs/common';
-import { UserActionPermissions } from '@auth/constants/user-action-permissions.enum';
-import { AclGuard } from '@auth/quards/acl.guard';
-import { JwtAuthGuard } from '@auth/quards/jwt-auth.guard';
-import { Permissions } from '@auth/utils/permissions.decorator';
+import { UserActionPermissions } from '@auth/constants';
+import { AclGuard, JwtAuthGuard } from '@auth/quards';
+import { Permissions } from '@auth/utils';
 import { BookService } from '@book/book.service';
-import { CreateBookInput } from '@book/dto/create-book-input.dto';
-import { UpdateBookInput } from '@book/dto/update-book-input.dto';
-import { BookDto } from '@book/dto/book-dto';
-import { GetBooksInput } from '@book/dto/get-books-input.dto';
-import { GetBooksResponseDto } from '@book/dto/get-books-response.dto';
+import {
+    CreateBookInput,
+    UpdateBookInput,
+    BookDto,
+    GetBooksInput,
+    GetBooksResponseDto,
+} from '@book/dto';
 
 @Resolver()
 export class BookResolver {

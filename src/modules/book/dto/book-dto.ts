@@ -1,5 +1,5 @@
 import { ObjectType, Field } from '@nestjs/graphql';
-import { BaseDtoEntity } from '@common/entities/base.dto.entity';
+import { BaseDtoEntity } from '@common/entities';
 
 @ObjectType()
 export class BookDto extends BaseDtoEntity {

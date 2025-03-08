@@ -14,7 +14,7 @@ import {
     BOOK_DESCRIPTION_MIN_LENGTH,
     BOOK_TITLE_MAX_LENGTH,
     BOOK_TITLE_MIN_LENGTH,
-} from '@book/constants/other';
+} from '@book/constants';
 
 @InputType()
 export class CreateBookInput {

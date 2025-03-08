@@ -1,8 +1,8 @@
-import { UpdateDynamodbItemInput } from '@common/types/update-dynamodb-item-input.type';
-import { DynamoTables } from '@common/enums/dynamo-tables.enum';
-import { UpdateBookReviewInput } from '../dto/update-book-review-input.dto';
+import { DynamoTables } from '@common/enums';
+import { UpdateDynamodbItemInput } from '@common/types';
+import { UpdateBookReviewInput } from '@book-reviews/dto';
 
-export const toUpdateDynamodbItemInputByReview = (
+export const transformToUpdateDynamodbItemInputByReview = (
     data: UpdateBookReviewInput
 ): UpdateDynamodbItemInput => {
     const updateFields: Record<string, any> = {};

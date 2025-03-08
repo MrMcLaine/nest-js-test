@@ -1,4 +1,4 @@
-import { GetBooksInput } from '@book/dto/get-books-input.dto';
+import { GetBooksInput } from '@book/dto';
 
 export const isCacheable = (input: GetBooksInput): boolean => {
     return (

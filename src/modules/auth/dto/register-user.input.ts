@@ -5,7 +5,7 @@ import {
     PASSWORD_MIN_LENGTH,
     USERNAME_MAX_LENGTH,
     USERNAME_MIN_LENGTH,
-} from '../constants/others';
+} from '@user/constants';
 
 @InputType()
 export class RegisterUserInput {

@@ -6,7 +6,7 @@ import { mockUser } from '@user/__tests__/user.test-data';
 import { BookReviewsService } from '@book-reviews/book-reviews.service';
 import { checkBookReviewOwner } from '@book-reviews/utils/check-book-review-owner.util';
 import * as bookReviewUtils from '@book-reviews/utils/transformBookReviewToDto';
-import * as updateUtils from '@book-reviews/utils/toUpdateDynamodbItemInputByReview';
+import * as updateUtils from '@book-reviews/utils/transformToUpdateDynamodbItemInputByReview';
 import {
     createBookReviewInput_1,
     mockReview,
@@ -89,9 +89,10 @@ describe('BookReviewsService', () => {
                 'deleteAllBookReviewsCache'
             ).mockResolvedValue(undefined);
             jest.spyOn(dynamoDBService, 'putItem').mockResolvedValue(undefined);
-            jest.spyOn(bookReviewUtils, 'transformBookReviewToDto').mockReturnValue(
-                mockReview
-            );
+            jest.spyOn(
+                bookReviewUtils,
+                'transformBookReviewToDto'
+            ).mockReturnValue(mockReview);
 
             const result = await bookReviewsService.createBookReview(
                 createBookReviewInput_1,
@@ -130,7 +131,7 @@ describe('BookReviewsService', () => {
 
             jest.spyOn(
                 updateUtils,
-                'toUpdateDynamodbItemInputByReview'
+                'transformToUpdateDynamodbItemInputByReview'
             ).mockReturnValue(expectedUpdateInput);
             jest.spyOn(dynamoDBService, 'updateItem').mockResolvedValue(
                 expectedUpdateInput
@@ -151,7 +152,7 @@ describe('BookReviewsService', () => {
             expect(redisService.deleteAllBookReviewsCache).toHaveBeenCalled();
 
             expect(
-                updateUtils.toUpdateDynamodbItemInputByReview
+                updateUtils.transformToUpdateDynamodbItemInputByReview
             ).toHaveBeenCalledWith(updateBookReviewInput);
 
             expect(dynamoDBService.updateItem).toHaveBeenCalledWith(

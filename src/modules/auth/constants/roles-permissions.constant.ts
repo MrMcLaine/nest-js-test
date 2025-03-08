@@ -1,5 +1,5 @@
 import { UserActionPermissions } from '@auth/constants/user-action-permissions.enum';
-import { UserRole } from '@user/constants/user-role.enum';
+import { UserRole } from '@user/constants';
 
 export const RolePermissions: Record<UserRole, UserActionPermissions[]> = {
     [UserRole.ADMIN]: [

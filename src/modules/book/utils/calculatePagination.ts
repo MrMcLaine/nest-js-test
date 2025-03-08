@@ -1,6 +1,6 @@
 import { Book } from '@book/book.entity';
-import { calculatePaginationParams } from '@book/utils/calculatePaginationParams';
-import { GetBooksInput } from '@book/dto/get-books-input.dto';
+import { calculatePaginationParams } from '@book/utils';
+import { GetBooksInput } from '@book/dto';
 
 interface GetHasMoreResponse {
     hasMore: boolean;

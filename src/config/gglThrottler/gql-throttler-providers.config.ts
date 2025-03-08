@@ -1,6 +1,6 @@
 import { APP_GUARD } from '@nestjs/core';
 import { Provider } from '@nestjs/common';
-import { GqlThrottlerGuard } from '@config/gglThrottler/gql-throttler-guard';
+import { GqlThrottlerGuard } from '@config';
 
 export const gqlThrottlerProviders: Provider = {
     provide: APP_GUARD,

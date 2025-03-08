@@ -1,8 +1,8 @@
 import { SelectQueryBuilder } from 'typeorm';
+import { SortOrder } from '@common/enums';
 import { Book } from '@book/book.entity';
-import { calculatePaginationParams } from '@book/utils/calculatePaginationParams';
-import { GetBooksInput } from '@book/dto/get-books-input.dto';
-import { SortOrder } from '@common/enums/sort-order.enum';
+import { calculatePaginationParams } from '@book/utils';
+import { GetBooksInput } from '@book/dto';
 
 export const buildBookQuery = (
     queryBuilder: SelectQueryBuilder<Book>,

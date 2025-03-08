@@ -1,6 +1,6 @@
 import { TypeOrmModuleAsyncOptions } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { EnvName } from '@common/enums/env-name.enum';
+import { EnvName } from '@common/enums';
 import { User } from '@user/user.entity';
 import { Book } from '@book/book.entity';
 

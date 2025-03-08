@@ -1,14 +1,18 @@
 import { Injectable } from '@nestjs/common';
-import { DynamoTables } from '@common/enums/dynamo-tables.enum';
-import { DynamoDBService } from '../../providers/dynamodb/dynamodb.service';
-import { RedisService } from '../../providers/redis/redis.service';
-import { transformBookReviewToDto } from './utils/transformBookReviewToDto';
-import { toUpdateDynamodbItemInputByReview } from '@book-reviews/utils/toUpdateDynamodbItemInputByReview';
-import { extractUserIdFromReviewId } from '@book-reviews/utils/extractUserIdFromReviewId';
-import { CreateBookReviewInput } from './dto/create-book-review-input.dto';
-import { BookReviewDto } from './dto/book-review.dto';
-import { UpdateBookReviewInput } from './dto/update-book-review-input.dto';
-import { BookReview } from './types/book-review.type';
+import { DynamoTables } from '@common/enums';
+import { DynamoDBService } from '@providers/dynamodb/dynamodb.service';
+import { RedisService } from '@providers/redis/redis.service';
+import {
+    transformBookReviewToDto,
+    transformToUpdateDynamodbItemInputByReview,
+    extractUserIdFromReviewId,
+} from '@book-reviews/utils';
+import {
+    CreateBookReviewInput,
+    BookReviewDto,
+    UpdateBookReviewInput,
+} from '@book-reviews/dto';
+import { BookReview } from '@book-reviews/types/book-review.type';
 
 @Injectable()
 export class BookReviewsService {
@@ -65,7 +69,7 @@ export class BookReviewsService {
             this.checkBookReviewOwner({ userId, reviewId: data.reviewId });
 
             const updatedReview = await this.dynamoDBService.updateItem(
-                toUpdateDynamodbItemInputByReview(data)
+                transformToUpdateDynamodbItemInputByReview(data)
             );
 
             await this.redisService.deleteAllBookReviewsCache();

@@ -1,5 +1,5 @@
 import { UpdateCommandInput } from '@aws-sdk/lib-dynamodb';
-import { UpdateDynamodbItemInput } from '@common/types/update-dynamodb-item-input.type';
+import { UpdateDynamodbItemInput } from '@common/types';
 
 export const convertToUpdateCommandInput = (
     input: UpdateDynamodbItemInput

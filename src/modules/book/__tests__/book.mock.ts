@@ -14,12 +14,10 @@ export const mockBookRepository = {
         update: jest.fn().mockReturnThis(),
         set: jest.fn().mockReturnThis(),
         returning: jest.fn().mockReturnThis(),
-        execute: jest
-            .fn()
-            .mockResolvedValue({
-                affected: 1,
-                raw: [{ id: 1, title: 'Updated Title' }],
-            }),
+        execute: jest.fn().mockResolvedValue({
+            affected: 1,
+            raw: [{ id: 1, title: 'Updated Title' }],
+        }),
     })),
 };
 

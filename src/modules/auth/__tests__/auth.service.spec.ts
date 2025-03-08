@@ -33,9 +33,7 @@ describe('AuthService', () => {
     });
 
     it('should return a user DTO and token when login is successful', async () => {
-        jest.spyOn(userService, 'findByEmail').mockResolvedValue(
-            mockUser
-        );
+        jest.spyOn(userService, 'findByEmail').mockResolvedValue(mockUser);
         jest.spyOn(jwtService, 'sign').mockReturnValue('mocked-jwt-token');
 
         const result: AuthResponse = await authService.login(mockLoginInput);

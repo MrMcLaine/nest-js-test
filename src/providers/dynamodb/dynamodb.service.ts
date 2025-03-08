@@ -13,12 +13,11 @@ import {
     UpdateCommand,
 } from '@aws-sdk/lib-dynamodb';
 import { QueryCommandInput } from '@aws-sdk/lib-dynamodb/dist-types/commands/QueryCommand';
-import { getDynamoDBClient } from '@config/dynamoDB/aws.dynamo-db-client';
-import { dynamoDbTableInitParams } from '@config/dynamoDB/dynamo-db-table-init-params';
-import { DynamoTables } from '@common/enums/dynamo-tables.enum';
-import { dynamodbConditionalErrorHandle } from '@common/errors/dynamodb-conditional-error-handle.util';
-import { convertToUpdateCommandInput } from '@common/utils/convertToUpdateCommandInput';
-import { UpdateDynamodbItemInput } from '@common/types/update-dynamodb-item-input.type';
+import { getDynamoDBClient, dynamoDbTableInitParams } from '@config';
+import { DynamoTables } from '@common/enums';
+import { dynamodbConditionalErrorHandle } from '@common/errors';
+import { convertToUpdateCommandInput } from '@common/utils';
+import { UpdateDynamodbItemInput } from '@common/types';
 
 @Injectable()
 export class DynamoDBService implements OnModuleInit {

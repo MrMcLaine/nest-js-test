@@ -1,18 +1,22 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { checkAffectedRows } from '@common/errors/check-affected.util';
-import { RedisService } from '../../providers/redis/redis.service';
+import { checkAffectedRows } from '@common/errors';
+import { RedisService } from '@providers/redis/redis.service';
 import { Book } from '@book/book.entity';
-import { transformBookToDto } from '@book/utils/transformBookToDto';
-import { buildBookQuery } from '@book/utils/buildBookQuery';
-import { calculatePagination } from '@book/utils/calculatePagination';
-import { isCacheable } from '@book/utils/isCacheable';
-import { CreateBookInput } from '@book/dto/create-book-input.dto';
-import { BookDto } from '@book/dto/book-dto';
-import { UpdateBookInput } from '@book/dto/update-book-input.dto';
-import { GetBooksInput } from '@book/dto/get-books-input.dto';
-import { GetBooksResponseDto } from '@book/dto/get-books-response.dto';
+import {
+    transformBookToDto,
+    buildBookQuery,
+    calculatePagination,
+    isCacheable,
+} from '@book/utils';
+import {
+    CreateBookInput,
+    BookDto,
+    UpdateBookInput,
+    GetBooksInput,
+    GetBooksResponseDto,
+} from '@book/dto';
 
 @Injectable()
 export class BookService {

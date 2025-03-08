@@ -1,5 +1,5 @@
 import { generateReviewId } from './generateBookReviewId';
-import { CreateBookReviewInput } from '../dto/create-book-review-input.dto';
+import { CreateBookReviewInput } from '@book-reviews/dto';
 import { BookReview } from '../types/book-review.type';
 
 export const transformBookReviewToDto = (

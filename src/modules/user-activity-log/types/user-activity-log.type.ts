@@ -1,5 +1,5 @@
 export interface UserActivityLog {
-    userId: number;
+    userId: string;
     date: string;
     operationName: string;
 }

@@ -10,18 +10,18 @@ type AuthResponse {
 type BookDto {
   author: String!
   description: String
-  id: Float!
+  id: String!
   publicationYear: Float!
   title: String!
 }
 
 type BookReviewDto {
-  bookId: Float!
+  bookId: String!
   createdAt: String!
   rating: Int!
   reviewId: String!
   reviewText: String
-  userId: Float!
+  userId: String!
 }
 
 input CreateBookInput {
@@ -32,7 +32,7 @@ input CreateBookInput {
 }
 
 input CreateBookReviewInput {
-  bookId: Int!
+  bookId: String!
   rating: Int!
   reviewText: String
 }
@@ -102,7 +102,7 @@ input UpdateBookInput {
 }
 
 input UpdateBookReviewInput {
-  bookId: Int
+  bookId: String
   rating: Int
   reviewId: String!
   reviewText: String
@@ -111,12 +111,12 @@ input UpdateBookReviewInput {
 type UserActivityLogDto {
   date: String!
   operationName: String!
-  userId: Float!
+  userId: String!
 }
 
 type UserDto {
   email: String!
-  id: Float!
+  id: String!
   role: UserRole!
   username: String!
 }

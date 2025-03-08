@@ -10,7 +10,7 @@ export const mockLogs: UserActivityLog[] = [
 ];
 
 export const failedMockLog: UserActivityLog = {
-    userId: 1,
+    userId: '1',
     operationName: 'Failed Attempt',
     date: new Date().toISOString(),
 };

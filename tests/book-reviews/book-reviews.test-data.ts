@@ -13,7 +13,7 @@ export const mockReviews = [
 ];
 
 export const createBookReviewInput: CreateBookReviewInput = {
-    bookId: 2,
+    bookId: '2',
     rating: 5,
     reviewText: 'Amazing book!',
 };
@@ -24,4 +24,4 @@ export const updateBookReviewInput: UpdateBookReviewInput = {
     reviewText: 'Updated review',
 };
 
-export const mockUserId = 1;
+export const mockUserId = '1';

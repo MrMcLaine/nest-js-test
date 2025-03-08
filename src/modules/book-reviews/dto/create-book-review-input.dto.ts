@@ -1,12 +1,12 @@
 import { InputType, Field, Int } from '@nestjs/graphql';
-import { IsInt, IsOptional, Min, Max, IsNotEmpty } from 'class-validator';
+import {IsInt, IsOptional, Min, Max, IsNotEmpty, IS_STRING, IsString} from 'class-validator';
 
 @InputType()
 export class CreateBookReviewInput {
-    @Field(() => Int)
+    @Field(() => String)
     @IsNotEmpty({ message: 'ID is required' })
-    @IsInt({ message: 'ID must be a valid integer' })
-    bookId: number;
+    @IsString({ message: 'Book ID must be a valid string' })
+    bookId: string;
 
     @Field(() => Int)
     @IsInt()

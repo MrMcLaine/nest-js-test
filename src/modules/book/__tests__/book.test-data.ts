@@ -3,7 +3,7 @@ import { CreateBookInput } from '../dto/create-book-input.dto';
 import { UpdateBookInput } from '../dto/update-book-input.dto';
 
 export const mockBook = {
-    id: 1,
+    id: '1',
     title: 'Mock Book',
     author: 'Test Author',
 } as Book;
@@ -20,6 +20,6 @@ export const updateBookInput: UpdateBookInput = {
 };
 
 export const mockUpdatedBook = {
-    id: 1,
+    id: '1',
     title: 'Updated Book Title',
 } as Book;

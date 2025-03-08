@@ -3,7 +3,7 @@ import { Field, ObjectType } from '@nestjs/graphql';
 
 @ObjectType()
 export abstract class BaseDtoEntity {
-    @PrimaryGeneratedColumn()
-    @Field(() => Number)
-    id: number;
+    @PrimaryGeneratedColumn('uuid')
+    @Field(() => String)
+    id: string;
 }

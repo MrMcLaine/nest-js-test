@@ -3,7 +3,7 @@ import { UserRole } from '@user/constants/user-role.enum';
 import { RegisterUserInput } from '@user/dto/register-user.input';
 
 export const mockUser: User = {
-    id: 1,
+    id: '1',
     email: 'test@example.com',
     username: 'Test User',
     password: 'hashed-password',
@@ -13,7 +13,7 @@ export const mockUser: User = {
 };
 
 export const mockRegisterUser: User = {
-    id: 1,
+    id: '1',
     email: 'new@example.com',
     username: 'New User',
     password: 'password123',

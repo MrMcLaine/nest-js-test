@@ -6,7 +6,7 @@ import { UpdateBookReviewInput } from '@book-reviews/dto/update-book-review-inpu
 export const mockReviews: BookReviewDto[] = [
     {
         reviewId: '1',
-        bookId: 1,
+        bookId: '1',
         userId: mockUser.id,
         rating: 5,
         createdAt: '2023-01-01',
@@ -15,7 +15,7 @@ export const mockReviews: BookReviewDto[] = [
 ];
 
 export const createBookReviewInput_1: CreateBookReviewInput = {
-    bookId: 1,
+    bookId: '1',
     rating: 5,
     reviewText: 'Nice book!',
 };

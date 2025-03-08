@@ -7,10 +7,10 @@ export class BookReviewDto implements BookReview {
     reviewId: string;
 
     @Field()
-    bookId: number;
+    bookId: string;
 
     @Field()
-    userId: number;
+    userId: string;
 
     @Field(() => Int)
     rating: number;

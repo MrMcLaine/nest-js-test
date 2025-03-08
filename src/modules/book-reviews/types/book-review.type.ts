@@ -1,7 +1,7 @@
 export interface BookReview {
     reviewId: string;
-    bookId: number;
-    userId: number;
+    bookId: string;
+    userId: string;
     rating: number;
     reviewText?: string;
     createdAt: string;

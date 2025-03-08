@@ -1,6 +1,6 @@
 interface GenerateReviewId {
-    bookId: number;
-    userId: number;
+    bookId: string;
+    userId: string;
 }
 
 export const generateReviewId = (input: GenerateReviewId): string => {

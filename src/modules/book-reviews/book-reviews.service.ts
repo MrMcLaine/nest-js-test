@@ -40,7 +40,7 @@ export class BookReviewsService {
 
     async createBookReview(
         data: CreateBookReviewInput,
-        userId: number
+        userId: string
     ): Promise<BookReviewDto> {
         try {
             const bookReviewData = transformBookReviewToDto(userId, data);
@@ -59,7 +59,7 @@ export class BookReviewsService {
 
     async updateBookReview(
         data: UpdateBookReviewInput,
-        userId: number
+        userId: string
     ): Promise<BookReviewDto> {
         try {
             this.checkBookReviewOwner({ userId, reviewId: data.reviewId });
@@ -76,7 +76,7 @@ export class BookReviewsService {
         }
     }
 
-    async deleteBookReview(reviewId: string, userId: number): Promise<string> {
+    async deleteBookReview(reviewId: string, userId: string): Promise<string> {
         try {
             this.checkBookReviewOwner({ userId, reviewId });
             await this.dynamoDBService.deleteItem(DynamoTables.BOOK_REVIEWS, {
@@ -92,7 +92,7 @@ export class BookReviewsService {
     }
 
     private checkBookReviewOwner(input: {
-        userId: number;
+        userId: string;
         reviewId: string;
     }): void {
         const userIdFromReviewId = extractUserIdFromReviewId(input.reviewId);

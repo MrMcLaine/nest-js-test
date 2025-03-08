@@ -44,12 +44,12 @@ export class BookReviewsService {
     ): Promise<BookReviewDto> {
         try {
             const bookReviewData = toBookReview(userId, data);
-            await this.redisService.deleteAllBookReviewsCache();
-
             await this.dynamoDBService.putItem(
                 DynamoTables.BOOK_REVIEWS,
                 bookReviewData
             );
+
+            await this.redisService.deleteAllBookReviewsCache();
 
             return bookReviewData;
         } catch (error) {
@@ -63,11 +63,14 @@ export class BookReviewsService {
     ): Promise<BookReviewDto> {
         try {
             checkBookReviewOwner({ userId, reviewId: data.reviewId });
-            await this.redisService.deleteAllBookReviewsCache();
 
-            return await this.dynamoDBService.updateItem(
+            const updatedReview = await this.dynamoDBService.updateItem(
                 toUpdateDynamodbItemInputByReview(data)
             );
+
+            await this.redisService.deleteAllBookReviewsCache();
+
+            return updatedReview;
         } catch (error) {
             throw new Error(`Failed to update the review: ${error.message}`);
         }
@@ -76,11 +79,11 @@ export class BookReviewsService {
     async deleteBookReview(reviewId: string, userId: number): Promise<string> {
         try {
             checkBookReviewOwner({ userId, reviewId });
-            await this.redisService.deleteAllBookReviewsCache();
-
             await this.dynamoDBService.deleteItem(DynamoTables.BOOK_REVIEWS, {
                 reviewId,
             });
+
+            await this.redisService.deleteAllBookReviewsCache();
 
             return `Review with ID ${reviewId} deleted successfully`;
         } catch (error) {

@@ -81,12 +81,11 @@ export class RedisService {
         }
     }
 
-    async clearAllBookPagesCache() {
-        console.log('Clearing all cached book pages...');
+    async clearAllBookPagesCache(): Promise<void> {
         for (const key of this.bookCacheKeys) {
             await this.redisDefaultService.del(key);
         }
-        this.bookCacheKeys.clear(); // Reset tracking
+        this.bookCacheKeys.clear();
     }
 
     private async trackBookPageCache(key: string) {

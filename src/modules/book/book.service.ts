@@ -53,10 +53,10 @@ export class BookService {
 
     async createBook(input: CreateBookInput): Promise<BookDto> {
         try {
-            await this.redisService.clearAllBookPagesCache();
-
             const newBook = this.bookRepository.create(input);
             const savedBook = await this.bookRepository.save(newBook);
+
+            await this.redisService.clearAllBookPagesCache();
 
             return toBookDto(savedBook);
         } catch (error) {
@@ -66,8 +66,6 @@ export class BookService {
 
     async updateBook(input: UpdateBookInput): Promise<BookDto> {
         try {
-            await this.redisService.clearAllBookPagesCache();
-
             const { id, ...updateData } = input;
 
             const result = await this.bookRepository
@@ -84,6 +82,8 @@ export class BookService {
                 id,
             });
 
+            await this.redisService.clearAllBookPagesCache();
+
             return toBookDto(result.raw[0]);
         } catch (error) {
             throw new Error(`Failed to update book: ${error.message}`);
@@ -92,8 +92,6 @@ export class BookService {
 
     async deleteBook(id: number): Promise<string> {
         try {
-            await this.redisService.clearAllBookPagesCache();
-
             const result = await this.bookRepository.delete(id);
 
             checkAffectedRows({
@@ -101,6 +99,8 @@ export class BookService {
                 entityName: 'Book',
                 id,
             });
+
+            await this.redisService.clearAllBookPagesCache();
 
             return `Book with ID ${id} deleted successfully`;
         } catch (error) {

@@ -1,8 +1,8 @@
 import { Resolver, Mutation, Args, Query } from '@nestjs/graphql';
 import { UseGuards } from '@nestjs/common';
 import { UserActionPermissions } from '@auth/constants/user-action-permissions.enum';
-import { AclGuard } from '@auth/acl.guard';
-import { JwtAuthGuard } from '@auth/jwt-auth.guard';
+import { AclGuard } from '@auth/quards/acl.guard';
+import { JwtAuthGuard } from '@auth/quards/jwt-auth.guard';
 import { Permissions } from '@auth/utils/permissions.decorator';
 import { BookService } from '@book/book.service';
 import { CreateBookInput } from '@book/dto/create-book-input.dto';

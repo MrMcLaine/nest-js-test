@@ -1,8 +1,8 @@
 import {Args, Mutation, Resolver, Context, Query} from '@nestjs/graphql';
 import { UseGuards } from '@nestjs/common';
 import { ContextNest } from '@common/types/context-nest.type';
-import { JwtAuthGuard } from '@auth/jwt-auth.guard';
-import { AclGuard } from '@auth/acl.guard';
+import { JwtAuthGuard } from '@auth/quards/jwt-auth.guard';
+import { AclGuard } from '@auth/quards/acl.guard';
 import { Permissions } from '@auth/utils/permissions.decorator';
 import { UserActionPermissions } from '@auth/constants/user-action-permissions.enum';
 import { BookReviewsService } from './book-reviews.service';

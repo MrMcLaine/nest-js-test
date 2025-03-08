@@ -37,7 +37,7 @@ describe('UserService', () => {
         it('should return a user if found', async () => {
             jest.spyOn(userRepository, 'findOneBy').mockResolvedValue(mockUser);
 
-            const result = await userService.findByEmailWithCheck(
+            const result = await userService.findByEmail(
                 mockUser.email
             );
 
@@ -51,7 +51,7 @@ describe('UserService', () => {
             jest.spyOn(userRepository, 'findOneBy').mockResolvedValue(null);
 
             await expect(
-                userService.findByEmailWithCheck('invalid@example.com')
+                userService.findByEmail('invalid@example.com')
             ).rejects.toThrow(
                 'Error finding user by email: User with email invalid@example.com not found'
             );

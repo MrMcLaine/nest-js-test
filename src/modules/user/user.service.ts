@@ -18,13 +18,9 @@ export class UserService {
         private readonly authService: AuthService
     ) {}
 
-    async findByEmailWithCheck(email: string): Promise<User> {
+    async findByEmail(email: string): Promise<User | null> {
         try {
-            const user = await this.userRepository.findOneBy({ email });
-
-            if (!user) throw new Error(`User with email ${email} not found`);
-
-            return user;
+            return await this.userRepository.findOneBy({ email });
         } catch (error) {
             throw new Error(`Error finding user by email: ${error.message}`);
         }

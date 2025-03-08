@@ -33,7 +33,7 @@ describe('AuthService', () => {
     });
 
     it('should return a user DTO and token when login is successful', async () => {
-        jest.spyOn(userService, 'findByEmailWithCheck').mockResolvedValue(
+        jest.spyOn(userService, 'findByEmail').mockResolvedValue(
             mockUser
         );
         jest.spyOn(jwtService, 'sign').mockReturnValue('mocked-jwt-token');
@@ -45,7 +45,7 @@ describe('AuthService', () => {
             token: 'mocked-jwt-token',
         });
 
-        expect(userService.findByEmailWithCheck).toHaveBeenCalledWith(
+        expect(userService.findByEmail).toHaveBeenCalledWith(
             mockLoginInput.email
         );
         expect(jwtService.sign).toHaveBeenCalledWith(
@@ -54,7 +54,7 @@ describe('AuthService', () => {
     });
 
     it('should throw an error if the email is not found', async () => {
-        jest.spyOn(userService, 'findByEmailWithCheck').mockRejectedValue(
+        jest.spyOn(userService, 'findByEmail').mockRejectedValue(
             new Error('User not found')
         );
 
@@ -62,7 +62,7 @@ describe('AuthService', () => {
             'User not found'
         );
 
-        expect(userService.findByEmailWithCheck).toHaveBeenCalledWith(
+        expect(userService.findByEmail).toHaveBeenCalledWith(
             mockInvalidLoginInput.email
         );
         expect(jwtService.sign).not.toHaveBeenCalled();

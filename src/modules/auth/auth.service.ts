@@ -21,15 +21,14 @@ export class AuthService {
     }
 
     async login(input: LoginAuthInput): Promise<AuthResponse> {
-        const user = await this.userService.findByEmailWithCheck(input.email);
+        const user = await this.userService.findByEmail(input.email);
 
-        const isPasswordValid = await BcryptUtil.comparePasswords(
-            input.password,
-            user.password
-        );
-
-        if (!isPasswordValid)
-            throw new Error(`The password ${input.password} is incorrect`);
+        if (
+            !user ||
+            !(await BcryptUtil.comparePasswords(input.password, user.password))
+        ) {
+            throw new Error('Invalid email or password');
+        }
 
         return {
             user: toUserDto(user),

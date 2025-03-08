@@ -31,14 +31,14 @@ describe('UserService (Integration)', () => {
     describe('findByEmailWithCheck', () => {
         it('should return a user if found', async () => {
             const user = await userRepository.save(mockUser);
-            const result = await userService.findByEmailWithCheck(user.email);
+            const result = await userService.findByEmail(user.email);
 
             expect(result).toEqual(user);
         });
 
         it('should throw an error if user is not found', async () => {
             await expect(
-                userService.findByEmailWithCheck('invalid@example.com')
+                userService.findByEmail('invalid@example.com')
             ).rejects.toThrow(
                 'Error finding user by email: User with email invalid@example.com not found'
             );

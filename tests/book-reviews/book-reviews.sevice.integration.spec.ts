@@ -1,7 +1,7 @@
 import { TestingModule } from '@nestjs/testing';
 import { DynamoTables } from '@common/enums/dynamo-tables.enum';
-import { DynamoDBService } from '@dynamodb/dynamodb.service';
-import { RedisService } from '@redis/redis.service';
+import { DynamoDBService } from '../../src/providers/dynamodb/dynamodb.service';
+import { RedisService } from '../../src/providers/redis/redis.service';
 import { BookReviewsService } from '@book-reviews/book-reviews.service';
 import { transformBookReviewToDto } from '@book-reviews/utils/transformBookReviewToDto';
 import { toUpdateDynamodbItemInputByReview } from '@book-reviews/utils/toUpdateDynamodbItemInputByReview';

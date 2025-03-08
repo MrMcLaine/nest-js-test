@@ -1,6 +1,6 @@
 import { TestingModule } from '@nestjs/testing';
 import { DynamoTables } from '@common/enums/dynamo-tables.enum';
-import { DynamoDBService } from '@dynamodb/dynamodb.service';
+import { DynamoDBService } from '../../src/providers/dynamodb/dynamodb.service';
 import { UserActivityLogsService } from '@/user-activity-log/user-activity-logs.service';
 import { createTestModule } from '../config/db.test.module';
 import { mockUserId } from '../book-reviews/book-reviews.test-data';

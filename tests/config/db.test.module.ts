@@ -8,11 +8,11 @@ import { Book } from '@book/book.entity';
 import { User } from '@user/user.entity';
 import { UserService } from '@user/user.service';
 import { BookService } from '@book/book.service';
-import { RedisService } from '@redis/redis.service';
+import { RedisService } from '../../src/providers/redis/redis.service';
 import { AuthService } from '@auth/auth.service';
 import { JwtStrategy } from '@auth/jwt.strategy';
 import { testToken } from '../auth/auth.test-data';
-import { DynamoDBService } from '@dynamodb/dynamodb.service';
+import { DynamoDBService } from '../../src/providers/dynamodb/dynamodb.service';
 import { BookReviewsService } from '@book-reviews/book-reviews.service';
 import { UserActivityLogsService } from '@/user-activity-log/user-activity-logs.service';
 

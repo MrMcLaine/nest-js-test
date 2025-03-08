@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { DynamoTables } from '@common/enums/dynamo-tables.enum';
-import { DynamoDBService } from '@dynamodb/dynamodb.service';
-import { RedisService } from '@redis/redis.service';
+import { DynamoDBService } from '../../../providers/dynamodb/dynamodb.service';
+import { RedisService } from '../../../providers/redis/redis.service';
 import { mockUser } from '@user/__tests__/user.test-data';
 import { BookReviewsService } from '@book-reviews/book-reviews.service';
 import { checkBookReviewOwner } from '@book-reviews/utils/check-book-review-owner.util';

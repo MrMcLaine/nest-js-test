@@ -1,7 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { Cache } from 'cache-manager';
-import { REDIS_DEFAULT_TTL } from '@redis/redis-ttl.const';
+import { REDIS_DEFAULT_TTL } from './redis-ttl.const';
 
 @Injectable()
 export class RedisDefaultService {

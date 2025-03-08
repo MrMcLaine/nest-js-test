@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { checkAffectedRows } from '@common/errors/check-affected.util';
-import { RedisService } from '@redis/redis.service';
+import { RedisService } from '../../providers/redis/redis.service';
 import { Book } from '@book/book.entity';
 import { transformBookToDto } from '@book/utils/transformBookToDto';
 import { buildBookQuery } from '@book/utils/buildBookQuery';

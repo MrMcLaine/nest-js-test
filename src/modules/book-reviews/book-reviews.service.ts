@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { DynamoTables } from '@common/enums/dynamo-tables.enum';
-import { DynamoDBService } from '@dynamodb/dynamodb.service';
-import { RedisService } from '@redis/redis.service';
+import { DynamoDBService } from '../../providers/dynamodb/dynamodb.service';
+import { RedisService } from '../../providers/redis/redis.service';
 import { transformBookReviewToDto } from './utils/transformBookReviewToDto';
 import { toUpdateDynamodbItemInputByReview } from '@book-reviews/utils/toUpdateDynamodbItemInputByReview';
 import { extractUserIdFromReviewId } from '@book-reviews/utils/extractUserIdFromReviewId';

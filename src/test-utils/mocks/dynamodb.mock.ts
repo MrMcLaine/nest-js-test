@@ -1,4 +1,4 @@
-import { DynamoDBService } from '@dynamodb/dynamodb.service';
+import { DynamoDBService } from '../../providers/dynamodb/dynamodb.service';
 
 export const dynamodbMock = {
     provide: DynamoDBService,

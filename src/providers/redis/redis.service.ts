@@ -3,9 +3,9 @@ import { BookReviewDto } from '@book-reviews/dto/book-review.dto';
 import { GetBooksInput } from '@book/dto/get-books-input.dto';
 import { GetBooksResponseDto } from '@book/dto/get-books-response.dto';
 import { RedisDefaultService } from './redis-default.service';
-import { REDIS_BOOKS_CACHE_TTL } from '@redis/redis-ttl.const';
+import { REDIS_BOOKS_CACHE_TTL } from './redis-ttl.const';
 import { RedisKeyName } from './redis-key-name.enum';
-import { generateBooksCacheKey } from '@redis/utils/generateBooksCacheKey';
+import { generateBooksCacheKey } from './utils/generateBooksCacheKey';
 
 @Injectable()
 export class RedisService {

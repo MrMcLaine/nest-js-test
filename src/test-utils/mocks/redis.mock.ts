@@ -1,4 +1,4 @@
-import { RedisService } from '@redis/redis.service';
+import { RedisService } from '../../providers/redis/redis.service';
 
 export const mockRedisService = {
     getBookPagesCache: jest.fn(),

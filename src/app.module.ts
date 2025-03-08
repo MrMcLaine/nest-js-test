@@ -8,11 +8,11 @@ import { configModuleOptions } from '@config/config-module-options.config';
 import { gqlThrottlerOptions } from '@config/gglThrottler/gql-throttler-options.config';
 import { gqlThrottlerProviders } from '@config/gglThrottler/gql-throttler-providers.config';
 import { typeOrmConfig } from '@config/typeorm.config';
-import { DynamodbModule } from '@dynamodb/dynamodb.module';
+import { DynamodbModule } from './providers/dynamodb/dynamodb.module';
 import { UserModule } from '@user/user.module';
 import { AuthModule } from '@auth/auth.module';
 import { BookModule } from '@book/book.module';
-import { RedisModule } from '@redis/redis.module';
+import { RedisModule } from './providers/redis/redis.module';
 import { BookReviewsModule } from '@book-reviews/book-reviews.module';
 import { UserActivityLogsModule } from '@/user-activity-log/user-activity-logs.module';
 

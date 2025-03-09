@@ -1,10 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { BcryptUtil } from '@common/utils';
 import { UserService } from '@user/user.service';
 import { buildUserData, transformUserToDto } from '@user/utils';
 import { UserDto } from '@user/dto/user-dto';
-import { convertToJwtPayload } from '@auth/utils';
+import { convertToJwtPayload, BcryptUtil } from '@auth/utils';
 import { AuthResponse, RegisterUserInput, LoginAuthInput } from '@auth/dto';
 import {
     invalidEmailOrPassword,

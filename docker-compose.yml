@@ -1,0 +1,57 @@
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: nestjs-postgres
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: nestjs_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  dynamodb-local: # ✅ Make sure app uses this name
+    image: amazon/dynamodb-local
+    container_name: dynamodb-local
+    restart: always
+    ports:
+      - "8000:8000"
+    volumes:
+      - dynamodb_data:/home/dynamodblocal/data
+    command: [ "-jar", "DynamoDBLocal.jar", "-sharedDb" ]
+
+  app:
+    build:
+      context: .
+    container_name: nestjs-app
+    restart: always
+    depends_on:
+      - postgres
+      - dynamodb-local
+    environment:
+      NODE_ENV: production
+      PROD_DB_NAME: nestjs_db
+      PROD_DB_USERNAME: postgres
+      PROD_DB_PASSWORD: postgres
+      PROD_DB_HOSTNAME: postgres
+      AWS_REGION: us-east-1
+      AWS_ACCESS_KEY_ID: fakeMyKeyId
+      AWS_SECRET_ACCESS_KEY: fakeSecretAccessKey
+      DYNAMODB_ENDPOINT: http://dynamodb-local:8000
+    ports:
+      - "5000:5000"
+    volumes:
+      - .:/opt/app
+      - /opt/app/node_modules
+    command: [ "npm", "run", "start:prod" ]
+
+volumes:
+  postgres_data:
+  dynamodb_data: # ✅ Added missing volume for DynamoDB

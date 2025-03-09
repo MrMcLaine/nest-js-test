@@ -17,6 +17,11 @@ import { BookModule } from '@book/book.module';
 import { BookReviewsModule } from '@book-reviews/book-reviews.module';
 import { UserModule } from '@user/user.module';
 import { UserActivityLogsModule } from '@user-activity-log/user-activity-logs.module';
+import * as crypto from 'crypto';
+
+if (typeof global.crypto === 'undefined') {
+    (global as any).crypto = crypto;
+}
 
 @Module({
     imports: [

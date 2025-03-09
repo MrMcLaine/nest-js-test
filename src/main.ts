@@ -9,7 +9,7 @@ async function bootstrap() {
 
     app.useGlobalPipes(CustomValidationPipe);
     if (process.env.NODE_ENV === 'production') {
-        app.use(helmet(helmetConfig));
+        // app.use(helmet(helmetConfig));
     }
 
     await app.listen(process.env.PORT ?? 5000);

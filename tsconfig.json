@@ -41,9 +41,6 @@
       "@providers/*": [
         "src/providers/*"
       ],
-      "@redis/*": [
-        "src/modules/redis/*"
-      ],
       "@user/*": [
         "src/modules/user/*"
       ],

@@ -1,5 +1,5 @@
 import { redisStore } from 'cache-manager-redis-store';
-import { CacheModuleOptions } from '@nestjs/cache-manager/dist/interfaces/cache-module.interface';
+import { CacheModuleOptions } from '@nestjs/cache-manager';
 import { ConfigService } from '@nestjs/config';
 import { EnvName } from '@common/enums';
 

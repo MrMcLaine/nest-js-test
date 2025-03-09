@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from '@user/user.entity';
+import { createUserErrorHandlerUtil } from '@user/errors/create-user-error-handler.util';
 import { transformUserToDto } from '@user/utils';
 import { UserDto } from '@user/dto/user-dto';
 
@@ -26,7 +27,7 @@ export class UserService {
 
             return transformUserToDto(user);
         } catch (error) {
-            throw new Error(`Failed to create user: ${error.message}`);
+            createUserErrorHandlerUtil(error);
         }
     }
 }

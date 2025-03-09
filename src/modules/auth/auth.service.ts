@@ -6,6 +6,10 @@ import { buildUserData, transformUserToDto } from '@user/utils';
 import { UserDto } from '@user/dto/user-dto';
 import { convertToJwtPayload } from '@auth/utils';
 import { AuthResponse, RegisterUserInput, LoginAuthInput } from '@auth/dto';
+import {
+    invalidEmailOrPassword,
+    registerUserErrorTitle,
+} from '@auth/constants/error-messages';
 
 @Injectable()
 export class AuthService {
@@ -32,7 +36,7 @@ export class AuthService {
                 token: this.generateToken(userDto),
             };
         } catch (error) {
-            throw new Error(`Failed to create user: ${error.message}`);
+            throw new Error(`${registerUserErrorTitle}${error.message}`);
         }
     }
 
@@ -47,7 +51,7 @@ export class AuthService {
                     user.password
                 ))
             ) {
-                throw new Error('Invalid email or password');
+                throw new Error(invalidEmailOrPassword);
             }
 
             const userDto = transformUserToDto(user);

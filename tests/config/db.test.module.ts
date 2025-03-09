@@ -2,7 +2,6 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { JwtModule, JwtService } from '@nestjs/jwt';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { BcryptUtil } from '@common/utils/bcrypt.util';
 import { EnvName } from '@common/enums/env-name.enum';
 import { Book } from '@book/book.entity';
 import { User } from '@user/user.entity';
@@ -11,20 +10,17 @@ import { BookService } from '@book/book.service';
 import { RedisService } from '@providers/redis/redis.service';
 import { AuthService } from '@auth/auth.service';
 import { JwtStrategy } from '@auth/jwt.strategy';
+import { BcryptUtil } from '../../src/modules/auth/utils';
 import { testToken } from '../auth/auth.test-data';
 import { DynamoDBService } from '@providers/dynamodb/dynamodb.service';
 import { BookReviewsService } from '@book-reviews/book-reviews.service';
 import { UserActivityLogsService } from '@user-activity-log/user-activity-logs.service';
+import { typeormTestConfig } from './typeorm.test.config';
 
 export const createTestModule = async (): Promise<TestingModule> => {
     return await Test.createTestingModule({
         imports: [
-            TypeOrmModule.forRoot({
-                type: 'sqlite',
-                database: ':memory:',
-                entities: [Book, User],
-                synchronize: true,
-            }),
+            TypeOrmModule.forRoot(typeormTestConfig),
             TypeOrmModule.forFeature([Book, User]),
             ConfigModule.forRoot({ isGlobal: true }),
             JwtModule.register({

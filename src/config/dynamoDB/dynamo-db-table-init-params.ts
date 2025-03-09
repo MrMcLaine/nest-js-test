@@ -6,7 +6,7 @@ export const dynamoDbTableInitParams: Record<string, CreateTableCommandInput> =
             TableName: 'user_activity_logs',
             AttributeDefinitions: [
                 { AttributeName: 'id', AttributeType: 'S' },
-                { AttributeName: 'userId', AttributeType: 'N' },
+                { AttributeName: 'userId', AttributeType: 'S' },
             ],
             KeySchema: [{ AttributeName: 'id', KeyType: 'HASH' }],
             BillingMode: 'PAY_PER_REQUEST',
@@ -22,8 +22,8 @@ export const dynamoDbTableInitParams: Record<string, CreateTableCommandInput> =
             TableName: 'book_reviews',
             AttributeDefinitions: [
                 { AttributeName: 'reviewId', AttributeType: 'S' },
-                { AttributeName: 'bookId', AttributeType: 'N' },
-                { AttributeName: 'userId', AttributeType: 'N' },
+                { AttributeName: 'bookId', AttributeType: 'S' },
+                { AttributeName: 'userId', AttributeType: 'S' },
             ],
             KeySchema: [{ AttributeName: 'reviewId', KeyType: 'HASH' }],
             BillingMode: 'PAY_PER_REQUEST',

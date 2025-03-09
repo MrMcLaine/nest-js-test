@@ -58,7 +58,7 @@ services:
     volumes:
       - .:/opt/app
       - /opt/app/node_modules
-    command: [ "npm", "run", "start:prod" ]
+    command: [ "npm", "run", "start:dev" ]
 
 volumes:
   postgres_data:

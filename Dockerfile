@@ -11,7 +11,7 @@ RUN adduser -S app
 COPY package*.json ./
 
 # Install dependencies
-RUN npm ci --only=production
+RUN npm ci
 
 # Copy all remaining project files
 COPY . .
@@ -26,4 +26,4 @@ USER app
 EXPOSE 5000
 
 # Run the application
-CMD ["npm", "run", "start:prod"]
+CMD ["npm", "run", "start:dev"]

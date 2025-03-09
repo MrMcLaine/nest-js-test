@@ -27,6 +27,21 @@ services:
       - dynamodb_data:/home/dynamodblocal/data
     command: [ "-jar", "DynamoDBLocal.jar", "-sharedDb" ]
 
+  redis:
+    image: redis:7-alpine
+    container_name: nestjs-redis
+    restart: always
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    command: [ "redis-server", "--appendonly", "yes" ]
+    healthcheck:
+      test: [ "CMD", "redis-cli", "ping" ]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
   app:
     build:
       context: .
@@ -35,6 +50,7 @@ services:
     depends_on:
       - postgres
       - dynamodb-local
+      - redis
     environment:
       NODE_ENV: production
       PROD_DB_NAME: nestjs_db
@@ -54,4 +70,5 @@ services:
 
 volumes:
   postgres_data:
-  dynamodb_data: # ✅ Added missing volume for DynamoDB
+  dynamodb_data:
+  redis_data:

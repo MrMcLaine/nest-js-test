@@ -9,7 +9,7 @@ import {
 } from '@book/constants';
 import { Book } from '@book/book.entity';
 import { BookService } from '@book/book.service';
-import { GetBooksResponseDto } from '@book/dto';
+import { GetBooksResponseDto, UpdateBookInput } from '@book/dto';
 import { createTestModule } from '../config/db.test.module';
 import { getBooksNoFilterMock } from '../redis/redis-mocks';
 import {
@@ -18,6 +18,7 @@ import {
     MOCK_BOOK,
     NO_EXISTING_BOOK_ID,
     VALID_CREATE_BOOK_DATA,
+    VALID_UPDATE_BOOK_TITLE,
 } from './book.test-data';
 
 describe('BookService (Integration)', () => {
@@ -57,18 +58,15 @@ describe('BookService (Integration)', () => {
         ).rejects.toThrow(createBookErrorTitle);
     });
 
-    // it('should return a list of books', async () => {
-    //     const t = await bookService.createBook(VALID_CREATE_BOOK_DATA);
-    //     console.log('t', t);
-    //     getBooksNoFilterMock(null, redisService);
-    //     const books = await bookService.getBooks();
-    //
-    //     console.log('books', books);
-    //
-    //     expect(books).toBeDefined();
-    //     expect(books.books.length).toBe(1);
-    //     expect(books.books[0].title).toBe(MOCK_BOOK.title);
-    // });
+    it('should return a list of books', async () => {
+        await bookService.createBook(VALID_CREATE_BOOK_DATA);
+        getBooksNoFilterMock(null, redisService);
+        const books = await bookService.getBooks();
+
+        expect(books).toBeDefined();
+        expect(books.books.length).toBe(1);
+        expect(books.books[0].title).toBe(MOCK_BOOK.title);
+    });
 
     it('should use cache when fetching books', async () => {
         const savedBook = await bookService.createBook(VALID_CREATE_BOOK_DATA);
@@ -86,22 +84,18 @@ describe('BookService (Integration)', () => {
         expect(redisService.getBookPagesCache).toHaveBeenCalled();
     });
 
-    // it('should successfully update a book', async () => {
-    //     const book = await bookService.createBook(VALID_CREATE_BOOK_DATA);
-    //
-    //     console.log('book', book)
-    //
-    //     const updateData: UpdateBookInput = {
-    //         id: book.id,
-    //         title: VALID_UPDATE_BOOK_TITLE,
-    //     };
-    //
-    //     const updatedBook = await bookService.updateBook(updateData);
-    //
-    //     console.log('upd', updatedBook)
-    //
-    //     expect(updatedBook.title).toBe(VALID_UPDATE_BOOK_TITLE);
-    // });
+    it('should successfully update a book', async () => {
+        const book = await bookService.createBook(VALID_CREATE_BOOK_DATA);
+
+        const updateData: UpdateBookInput = {
+            id: book.id,
+            title: VALID_UPDATE_BOOK_TITLE,
+        };
+
+        const updatedBook = await bookService.updateBook(updateData);
+
+        expect(updatedBook.title).toBe(VALID_UPDATE_BOOK_TITLE);
+    });
 
     it('should throw an error when trying to update a non-existing book', async () => {
         await expect(

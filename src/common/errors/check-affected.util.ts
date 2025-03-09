@@ -3,7 +3,7 @@ import { NotFoundException } from '@nestjs/common';
 interface CheckAffected {
     affected: number;
     entityName: string;
-    id: number;
+    id: string;
 }
 
 export const checkAffectedRows = (input: CheckAffected) => {

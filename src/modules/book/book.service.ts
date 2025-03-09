@@ -3,6 +3,11 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { checkAffectedRows } from '@common/errors';
 import { RedisService } from '@providers/redis/redis.service';
+import {
+    createBookErrorTitle,
+    deleteBookErrorTitle,
+    updateBookErrorTitle,
+} from '@book/constants';
 import { Book } from '@book/book.entity';
 import {
     transformBookToDto,
@@ -64,7 +69,7 @@ export class BookService {
 
             return transformBookToDto(savedBook);
         } catch (error) {
-            throw new Error(`Failed to create book: ${error.message}`);
+            throw new Error(`${createBookErrorTitle}: ${error.message}`);
         }
     }
 
@@ -90,11 +95,11 @@ export class BookService {
 
             return transformBookToDto(result.raw[0]);
         } catch (error) {
-            throw new Error(`Failed to update book: ${error.message}`);
+            throw new Error(`${updateBookErrorTitle}: ${error.message}`);
         }
     }
 
-    async deleteBook(id: number): Promise<string> {
+    async deleteBook(id: string): Promise<string> {
         try {
             const result = await this.bookRepository.delete(id);
 
@@ -108,7 +113,7 @@ export class BookService {
 
             return `Book with ID ${id} deleted successfully`;
         } catch (error) {
-            throw new Error(`Failed to delete book: ${error.message}`);
+            throw new Error(`${deleteBookErrorTitle}: ${error.message}`);
         }
     }
 }

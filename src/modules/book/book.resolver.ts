@@ -40,7 +40,7 @@ export class BookResolver {
     @Mutation(() => String)
     @UseGuards(JwtAuthGuard, AclGuard)
     @Permissions(UserActionPermissions.DELETE_BOOK)
-    async deleteBook(@Args('id') id: number): Promise<string> {
+    async deleteBook(@Args('id') id: string): Promise<string> {
         return this.bookService.deleteBook(id);
     }
 }

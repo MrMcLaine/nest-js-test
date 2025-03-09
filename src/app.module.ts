@@ -16,7 +16,7 @@ import { AuthModule } from '@auth/auth.module';
 import { BookModule } from '@book/book.module';
 import { BookReviewsModule } from '@book-reviews/book-reviews.module';
 import { UserModule } from '@user/user.module';
-import { UserActivityLogsModule } from '@/user-activity-log/user-activity-logs.module';
+import { UserActivityLogsModule } from '@user-activity-log/user-activity-logs.module';
 
 @Module({
     imports: [

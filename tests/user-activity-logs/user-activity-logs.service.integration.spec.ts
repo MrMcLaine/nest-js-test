@@ -1,7 +1,7 @@
 import { TestingModule } from '@nestjs/testing';
 import { DynamoTables } from '@common/enums/dynamo-tables.enum';
-import { DynamoDBService } from '../../src/providers/dynamodb/dynamodb.service';
-import { UserActivityLogsService } from '@/user-activity-log/user-activity-logs.service';
+import { DynamoDBService } from '@providers/dynamodb/dynamodb.service';
+import { UserActivityLogsService } from '@user-activity-log/user-activity-logs.service';
 import { createTestModule } from '../config/db.test.module';
 import { mockUserId } from '../book-reviews/book-reviews.test-data';
 import { failedMockLog, mockLogs } from './user-activity-logs.test-data';
@@ -45,7 +45,7 @@ describe('UserActivityLogsService (Integration)', () => {
             );
 
             await expect(
-                userActivityLogsService.getUserActivityLogs(1)
+                userActivityLogsService.getUserActivityLogs('1')
             ).rejects.toThrow(
                 'Failed to get user activity logs: DynamoDB query failed'
             );

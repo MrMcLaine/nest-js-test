@@ -14,7 +14,7 @@ import { JwtStrategy } from '@auth/jwt.strategy';
 import { testToken } from '../auth/auth.test-data';
 import { DynamoDBService } from '@providers/dynamodb/dynamodb.service';
 import { BookReviewsService } from '@book-reviews/book-reviews.service';
-import { UserActivityLogsService } from '@/user-activity-log/user-activity-logs.service';
+import { UserActivityLogsService } from '@user-activity-log/user-activity-logs.service';
 
 export const createTestModule = async (): Promise<TestingModule> => {
     return await Test.createTestingModule({

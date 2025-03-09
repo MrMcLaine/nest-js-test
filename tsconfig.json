@@ -44,7 +44,7 @@
       "@user/*": [
         "src/modules/user/*"
       ],
-      "@/user-activity-log/*": [
+      "@user-activity-log/*": [
         "src/modules/user-activity-log/*"
       ]
     }

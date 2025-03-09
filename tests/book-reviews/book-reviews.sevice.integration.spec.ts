@@ -1,7 +1,7 @@
 import { TestingModule } from '@nestjs/testing';
 import { DynamoTables } from '@common/enums/dynamo-tables.enum';
-import { DynamoDBService } from '../../src/providers/dynamodb/dynamodb.service';
-import { RedisService } from '../../src/providers/redis/redis.service';
+import { DynamoDBService } from '@providers/dynamodb/dynamodb.service';
+import { RedisService } from '@providers/redis/redis.service';
 import { BookReviewsService } from '@book-reviews/book-reviews.service';
 import { transformBookReviewToDto } from '@book-reviews/utils/transformBookReviewToDto';
 import { transformToUpdateDynamodbItemInputByReview } from '@book-reviews/utils/transformToUpdateDynamodbItemInputByReview';
@@ -69,12 +69,16 @@ describe('BookReviewsService (Integration)', () => {
 
             jest.spyOn(dynamoDBService, 'putItem').mockResolvedValue();
 
-            const result = await bookReviewsService.createBookReview(
+            const bookReviewDto = await bookReviewsService.createBookReview(
                 createBookReviewInput,
                 mockUserId
             );
 
-            expect(result).toEqual(mockReview);
+            expect(bookReviewDto.userId).toBe(mockReview.userId);
+            expect(bookReviewDto.reviewId).toBe(mockReview.reviewId);
+            expect(bookReviewDto.reviewText).toBe(mockReview.reviewText);
+            expect(bookReviewDto.bookId).toBe(mockReview.bookId);
+            expect(bookReviewDto.rating).toBe(mockReview.rating);
             expect(redisService.deleteAllBookReviewsCache).toHaveBeenCalled();
             expect(dynamoDBService.putItem).toHaveBeenCalledWith(
                 DynamoTables.BOOK_REVIEWS,

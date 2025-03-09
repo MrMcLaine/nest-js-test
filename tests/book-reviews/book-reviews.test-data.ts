@@ -4,8 +4,8 @@ import { UpdateBookReviewInput } from '@book-reviews/dto/update-book-review-inpu
 export const mockReviews = [
     {
         reviewId: '1',
-        bookId: 2,
-        userId: 1,
+        bookId: '1',
+        userId: '1',
         rating: 5,
         reviewText: 'Great!',
         createdAt: new Date().toISOString(),

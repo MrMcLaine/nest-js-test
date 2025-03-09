@@ -8,7 +8,7 @@ import { UserActivityLog } from './types/user-activity-log.type';
 export class UserActivityLogsService {
     constructor(private readonly dynamoDBService: DynamoDBService) {}
 
-    async getUserActivityLogs(userId: number): Promise<UserActivityLogDto[]> {
+    async getUserActivityLogs(userId: string): Promise<UserActivityLogDto[]> {
         try {
             return await this.dynamoDBService.queryTable<UserActivityLogDto>(
                 DynamoTables.USER_ACTIVITY_LOGS,

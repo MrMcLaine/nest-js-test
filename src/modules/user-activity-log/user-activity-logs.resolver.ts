@@ -10,7 +10,7 @@ export class UserActivityLogsResolver {
 
     @Query(() => [UserActivityLogDto])
     async getUserActivityLogs(
-        @Args('userId') userId: number
+        @Args('userId') userId: string
     ): Promise<UserActivityLogDto[]> {
         return this.userActivityLogsService.getUserActivityLogs(userId);
     }

@@ -1,4 +1,4 @@
-import { UserActivityLog } from '@/user-activity-log/types/user-activity-log.type';
+import { UserActivityLog } from '@user-activity-log/types/user-activity-log.type';
 import { mockUserId } from '../book-reviews/book-reviews.test-data';
 
 export const mockLogs: UserActivityLog[] = [

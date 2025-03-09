@@ -8,9 +8,8 @@ async function bootstrap() {
     const app = await NestFactory.create(AppModule);
 
     app.useGlobalPipes(CustomValidationPipe);
-    if (process.env.NODE_ENV === 'production') {
-        // app.use(helmet(helmetConfig));
-    }
+    if (process.env.DISABLE_HELMET_FOR_APOLLO === 'false')
+        app.use(helmet(helmetConfig));
 
     await app.listen(process.env.PORT ?? 5000);
 }

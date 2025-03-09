@@ -17,7 +17,7 @@ services:
       timeout: 5s
       retries: 10
 
-  dynamodb-local: # ✅ Make sure app uses this name
+  dynamodb-local:
     image: amazon/dynamodb-local
     container_name: dynamodb-local
     restart: always
@@ -51,16 +51,8 @@ services:
       - postgres
       - dynamodb-local
       - redis
-    environment:
-      NODE_ENV: production
-      PROD_DB_NAME: nestjs_db
-      PROD_DB_USERNAME: postgres
-      PROD_DB_PASSWORD: postgres
-      PROD_DB_HOSTNAME: postgres
-      AWS_REGION: us-east-1
-      AWS_ACCESS_KEY_ID: fakeMyKeyId
-      AWS_SECRET_ACCESS_KEY: fakeSecretAccessKey
-      DYNAMODB_ENDPOINT: http://dynamodb-local:8000
+    env_file:
+      - .env
     ports:
       - "5000:5000"
     volumes:

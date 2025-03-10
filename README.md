@@ -51,8 +51,7 @@ user activity logs, and reviews. It integrates **PostgreSQL** for relational dat
 Make sure you have the following installed:
 
 - **Node.js** (>= 16.x)
-- **Docker** (for PostgreSQL & Redis)
-- **AWS DynamoDB** (or use LocalStack for local development)
+- **Docker & Docker Compose** (for PostgreSQL, Redis, and DynamoDB Local)
 
 ### **2️⃣ Clone the Repository**
 
@@ -70,13 +69,22 @@ npm install
 ### **4️⃣ Environment Variables**
 
 - **Rename the `.env.example` file to `.env`**
-- **Update the environment variables in the `.env` file**
+- **For local development you don't need to update the environment variables in the `.env` file**
 
-### **5️⃣ Run the Application**
+### **5️⃣ Run the Application using Docker**
 
 ```sh
-npm run start:dev
+docker-compose build
 ```
+```sh
+docker-compose up -d
+```
+
+This will run:
+* PostgreSQL on localhost:5432
+* DynamoDB Local on localhost:8000
+* Redis on localhost:6379
+* NestJS App on localhost:5000
 
 #### 🖥️ The server will run at http://localhost:5000/graphql by default.
 
@@ -116,7 +124,7 @@ npm run build
 2. Run in Production Mode
 
 ```sh
-npm run start:prod
+docker-compose -f docker-compose.prod.yml up -d
 ```
 
 ### 🛡 Security Measures

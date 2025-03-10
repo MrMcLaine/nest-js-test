@@ -1,0 +1,67 @@
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: nestjs-postgres
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: nestjs_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./tests/config/init-test-db.sql:/docker-entrypoint-initdb.d/init-test-db.sql
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  dynamodb-local:
+    image: amazon/dynamodb-local
+    container_name: dynamodb-local
+    restart: always
+    ports:
+      - "8000:8000"
+    volumes:
+      - dynamodb_data:/home/dynamodblocal/data
+    command: [ "-jar", "DynamoDBLocal.jar", "-sharedDb" ]
+
+  redis:
+    image: redis:7-alpine
+    container_name: nestjs-redis
+    restart: always
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    command: [ "redis-server", "--appendonly", "yes" ]
+    healthcheck:
+      test: [ "CMD", "redis-cli", "ping" ]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  app:
+    build:
+      context: .
+    container_name: nestjs-app
+    restart: always
+    depends_on:
+      - postgres
+      - dynamodb-local
+      - redis
+    env_file:
+      - .env
+    ports:
+      - "5000:5000"
+    volumes:
+      - .:/opt/app
+      - /opt/app/node_modules
+    command: [ "npm", "run", "start:dev" ]
+
+volumes:
+  postgres_data:
+  dynamodb_data:
+  redis_data:

@@ -5,7 +5,7 @@ import { EnvName } from '@common/enums';
 
 const REDIS_DEFAULT_TTL = 300;
 const REDIS_DEFAULT_LOCAL_PORT = 6379;
-const REDIS_DEFAULT_LOCAL_HOST = 'localhost';
+const REDIS_DEFAULT_LOCAL_HOST = 'redis';
 
 export const redisConfig = (
     configService: ConfigService

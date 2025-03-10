@@ -29,9 +29,9 @@ export const typeOrmConfig: TypeOrmModuleAsyncOptions = {
 };
 
 const defaultConfig = {
-    host: 'localhost',
+    host: 'postgres',
     port: 5432,
     username: 'postgres',
-    password: '',
+    password: 'postgres',
     database: 'nestjs_db',
 };

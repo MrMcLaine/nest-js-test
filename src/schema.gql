@@ -60,7 +60,7 @@ input LoginAuthInput {
 type Mutation {
   createBook(data: CreateBookInput!): BookDto!
   createBookReview(data: CreateBookReviewInput!): BookReviewDto!
-  deleteBook(id: Float!): String!
+  deleteBook(id: String!): String!
   deleteBookReview(reviewId: String!): String!
   login(data: LoginAuthInput!): AuthResponse!
   registerUser(data: RegisterUserInput!): AuthResponse!
@@ -71,7 +71,7 @@ type Mutation {
 type Query {
   getAllBookReviews: [BookReviewDto!]!
   getBooks(filters: GetBooksInput): GetBooksResponseDto!
-  getUserActivityLogs(userId: Float!): [UserActivityLogDto!]!
+  getUserActivityLogs(userId: String!): [UserActivityLogDto!]!
 }
 
 input RegisterUserInput {
@@ -96,7 +96,7 @@ enum SortOrder {
 input UpdateBookInput {
   author: String
   description: String
-  id: Int!
+  id: String!
   publicationYear: Int
   title: String
 }

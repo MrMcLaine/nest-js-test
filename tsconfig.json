@@ -48,5 +48,6 @@
         "src/modules/user-activity-log/*"
       ]
     }
-  }
+  },
+  "include": ["src", "test"]
 }

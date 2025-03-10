@@ -17,8 +17,6 @@ export const configModuleOptions: ConfigModuleOptions = {
         [EnvName.JWT_SECRET]: Joi.string().required(),
         [EnvName.JWT_EXPIRES_IN]: Joi.string(),
 
-        [EnvName.AWS_ACCESS_KEY_ID]: Joi.string().required(),
-        [EnvName.AWS_SECRET_ACCESS_KEY]: Joi.string().required(),
         [EnvName.AWS_REGION]: Joi.string().allow(''),
 
         [EnvName.REDIS_HOST]: Joi.string().required(),

@@ -8,8 +8,6 @@ import { generateBooksCacheKey } from './utils/generateBooksCacheKey';
 
 @Injectable()
 export class RedisService {
-    private readonly bookCacheKeys: Set<string> = new Set();
-
     constructor(private readonly redisDefaultService: RedisDefaultService) {}
 
     async getAllBookReviewsFromCache(): Promise<BookReviewDto[]> {
@@ -81,14 +79,19 @@ export class RedisService {
     }
 
     async clearAllBookPagesCache(): Promise<void> {
-        console.log('START CLEAR ALL BOOK PAGES CACHE');
-        for (const key of this.bookCacheKeys) {
-            await this.redisDefaultService.del(key);
-        }
-        this.bookCacheKeys.clear();
+        const keys: string[] = await this.redisDefaultService.getSet(
+            RedisKeyName.BOOKS_PAGINATION
+        );
+
+        if (keys.length > 0) await this.redisDefaultService.delMultiple(keys);
+
+        await this.redisDefaultService.del(RedisKeyName.BOOKS_PAGINATION);
     }
 
-    private async trackBookPageCache(key: string) {
-        this.bookCacheKeys.add(key);
+    private async trackBookPageCache(key: string): Promise<void> {
+        await this.redisDefaultService.setAdd(
+            RedisKeyName.BOOKS_PAGINATION,
+            key
+        );
     }
 }

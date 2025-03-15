@@ -1,5 +1,6 @@
 import { SelectQueryBuilder } from 'typeorm';
 import { SortOrder } from '@common/enums';
+import { SortField } from '@book/constants';
 import { Book } from '@book/book.entity';
 import { calculatePaginationParams } from '@book/utils';
 import { GetBooksInput } from '@book/dto';
@@ -26,12 +27,10 @@ export const buildBookQuery = (
         });
     }
 
-    if (filters && filters.sortField) {
-        queryBuilder.orderBy(
-            `book.${filters.sortField}`,
-            filters.sortOrder ?? SortOrder.ASC
-        );
-    }
+    const sortField = filters.sortField ?? SortField.TITLE;
+    const sortOrder = filters.sortOrder ?? SortOrder.ASC;
+
+    queryBuilder.orderBy(`book.${sortField}`, sortOrder);
 
     const { limit, offset } = calculatePaginationParams(filters);
 

@@ -1,6 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
 import { checkAffectedRows } from '@common/errors';
 import { RedisService } from '@providers/redis/redis.service';
 import {
@@ -8,10 +6,9 @@ import {
     deleteBookErrorTitle,
     updateBookErrorTitle,
 } from '@book/constants';
-import { Book } from '@book/book.entity';
+import { BookRepository } from '@book/book.repository';
 import {
     transformBookToDto,
-    buildBookQuery,
     calculatePagination,
     isCacheable,
 } from '@book/utils';
@@ -26,8 +23,7 @@ import {
 @Injectable()
 export class BookService {
     constructor(
-        @InjectRepository(Book)
-        private readonly bookRepository: Repository<Book>,
+        private readonly bookRepository: BookRepository,
         private readonly redisService: RedisService
     ) {}
 
@@ -42,10 +38,7 @@ export class BookService {
                 if (cachedData) return cachedData;
             }
 
-            let queryBuilder = this.bookRepository.createQueryBuilder('book');
-            queryBuilder = buildBookQuery(queryBuilder, input);
-
-            const books = await queryBuilder.getMany();
+            const books = await this.bookRepository.findBooks(input);
             const { hasMore, data } = calculatePagination(books, input);
 
             const bookDtos = data.map(transformBookToDto);
@@ -62,9 +55,7 @@ export class BookService {
 
     async createBook(input: CreateBookInput): Promise<BookDto> {
         try {
-            const newBook = this.bookRepository.create(input);
-            const savedBook = await this.bookRepository.save(newBook);
-
+            const savedBook = await this.bookRepository.createBook(input);
             await this.redisService.clearAllBookPagesCache();
 
             return transformBookToDto(savedBook);
@@ -77,23 +68,20 @@ export class BookService {
         try {
             const { id, ...updateData } = input;
 
-            const result = await this.bookRepository
-                .createQueryBuilder()
-                .update(Book)
-                .set(updateData)
-                .where('id = :id', { id })
-                .returning('*')
-                .execute();
+            const { affected, book } = await this.bookRepository.updateBookData(
+                id,
+                updateData
+            );
 
             checkAffectedRows({
-                affected: result.affected,
+                affected,
                 entityName: 'Book',
                 id,
             });
 
             await this.redisService.clearAllBookPagesCache();
 
-            return transformBookToDto(result.raw[0]);
+            return transformBookToDto(book);
         } catch (error) {
             throw new Error(`${updateBookErrorTitle}: ${error.message}`);
         }
@@ -101,10 +89,10 @@ export class BookService {
 
     async deleteBook(id: string): Promise<string> {
         try {
-            const result = await this.bookRepository.delete(id);
+            const affected = await this.bookRepository.deleteBookById(id);
 
             checkAffectedRows({
-                affected: result.affected,
+                affected,
                 entityName: 'Book',
                 id,
             });

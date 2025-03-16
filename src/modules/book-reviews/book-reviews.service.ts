@@ -1,18 +1,16 @@
 import { Injectable } from '@nestjs/common';
-import { convertToUpdateCommandInput } from '@common/utils';
-import { DynamoDBService } from '@providers/dynamodb/dynamodb.service';
 import { RedisService } from '@providers/redis/redis.service';
+import { BookReviewsRepository } from '@book-reviews/book-reviews.repository';
 import {
     CreateBookReviewInput,
     BookReviewDto,
     UpdateBookReviewInput,
 } from '@book-reviews/dto';
-import { BookReview } from '@book-reviews/types/book-review.type';
 
 @Injectable()
 export class BookReviewsService {
     constructor(
-        private readonly dynamoDBService: DynamoDBService,
+        private readonly bookReviewsRepository: BookReviewsRepository,
         private readonly redisService: RedisService
     ) {}
 
@@ -23,12 +21,8 @@ export class BookReviewsService {
 
             if (reviewCached) return reviewCached;
 
-            const reviews = await this.dynamoDBService.queryByGSI<BookReview>(
-                'EntityTypeIndex',
-                'EntityType',
-                'REVIEW'
-            );
-
+            const reviews =
+                await this.bookReviewsRepository.getAllBookReviews();
             await this.redisService.setAllBookReviewsToCache(reviews);
 
             return reviews;
@@ -44,22 +38,13 @@ export class BookReviewsService {
         userId: string
     ): Promise<BookReviewDto> {
         try {
-            const bookReviewData: BookReview = {
-                PK: `BOOK#${data.bookId}`,
-                SK: `USER#${userId}`,
-                bookId: data.bookId,
-                userId,
-                rating: data.rating,
-                reviewText: data.reviewText,
-                createdAt: new Date().toISOString(),
-                EntityType: 'REVIEW',
-            };
-
-            await this.dynamoDBService.putItem(bookReviewData);
-
+            const review = await this.bookReviewsRepository.createBookReview(
+                data,
+                userId
+            );
             await this.redisService.deleteAllBookReviewsCache();
 
-            return bookReviewData;
+            return review;
         } catch (error) {
             throw new Error(`Failed to create the review: ${error.message}`);
         }
@@ -72,17 +57,15 @@ export class BookReviewsService {
         try {
             await this.checkBookReviewOwner({ userId, bookId: data.bookId });
 
-            const updateParams = convertToUpdateCommandInput({
-                key: { PK: `BOOK#${data.bookId}`, SK: `USER#${userId}` },
-                updates: {
-                    rating: data.rating,
-                    reviewText: data.reviewText,
-                },
-                includeUpdatedAt: true,
-            });
-
             const updatedReview =
-                await this.dynamoDBService.updateItem(updateParams);
+                await this.bookReviewsRepository.updateBookReview({
+                    bookId: data.bookId,
+                    userId,
+                    updates: {
+                        rating: data.rating,
+                        reviewText: data.reviewText,
+                    },
+                });
 
             await this.redisService.deleteAllBookReviewsCache();
 
@@ -95,11 +78,10 @@ export class BookReviewsService {
     async deleteBookReview(bookId: string, userId: string): Promise<string> {
         try {
             await this.checkBookReviewOwner({ userId, bookId });
-            await this.dynamoDBService.deleteItem(
-                `BOOK#${bookId}`,
-                `USER#${userId}`
-            );
-
+            await this.bookReviewsRepository.deleteBookReview({
+                bookId,
+                userId,
+            });
             await this.redisService.deleteAllBookReviewsCache();
 
             return `Review for book with ID ${bookId} deleted successfully`;
@@ -112,12 +94,10 @@ export class BookReviewsService {
         userId: string;
         bookId: string;
     }): Promise<void> {
-        const review = await this.dynamoDBService.queryByPK<BookReview>(
-            `BOOK#${input.bookId}`,
-            `USER#${input.userId}`
-        );
+        const review =
+            await this.bookReviewsRepository.getBookReviewByUser(input);
 
-        if (!review || review.length === 0) {
+        if (!review) {
             throw new Error('You are not the owner of this book review');
         }
     }

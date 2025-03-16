@@ -11,7 +11,7 @@ export const getDynamoDBClient = (configService: ConfigService) => {
             region: configService.get<string>('AWS_REGION', 'us-east-1'),
             endpoint: configService.get<string>(
                 'DYNAMODB_ENDPOINT',
-                'http://dynamodb-local:8000' // ✅ Make sure this matches Docker service name
+                'http://dynamodb-local:8000'
             ),
             credentials: isLocal
                 ? undefined // ✅ No credentials needed for DynamoDB Local

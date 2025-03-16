@@ -9,15 +9,17 @@ import {
     DynamoDBDocumentClient,
     PutCommand,
     QueryCommand,
-    ScanCommand,
     UpdateCommand,
+    UpdateCommandInput,
 } from '@aws-sdk/lib-dynamodb';
-import { QueryCommandInput } from '@aws-sdk/lib-dynamodb/dist-types/commands/QueryCommand';
 import { getDynamoDBClient, dynamoDbTableInitParams } from '@config';
-import { DynamoTables } from '@common/enums';
+import { DYNAMO_DB_TABLE_NAME } from '@common/constants';
 import { dynamodbConditionalErrorHandle } from '@common/errors';
-import { convertToUpdateCommandInput } from '@common/utils';
-import { UpdateDynamodbItemInput } from '@common/types';
+import {
+    buildDeleteParams,
+    buildQueryByGSIParams,
+    buildQueryByPKParams,
+} from '@providers/dynamodb/dynamodb-params.util';
 
 @Injectable()
 export class DynamoDBService implements OnModuleInit {
@@ -33,28 +35,16 @@ export class DynamoDBService implements OnModuleInit {
     async onModuleInit() {
         try {
             await this.testConnection();
-            await this.createTable('userActivityLogs');
-            await this.createTable('bookReviews');
+            await this.createTable();
             this.logger.log('✅ Successfully connected to DynamoDB');
         } catch (error) {
             this.logger.error('❌ Failed to connect to DynamoDB', error);
         }
     }
 
-    async queryTable<T>(
-        tableName: DynamoTables,
-        key: Record<string, any>
-    ): Promise<T[]> {
+    async queryByPK<T>(pk: string, skPrefix?: string): Promise<T[]> {
         try {
-            const params: QueryCommandInput = {
-                TableName: tableName,
-                IndexName: 'UserIdIndex',
-                KeyConditionExpression: 'userId = :userId',
-                ExpressionAttributeValues: {
-                    ':userId': key.userId,
-                },
-            };
-
+            const params = buildQueryByPKParams(pk, skPrefix);
             const result = await this.dynamoDBClient.send(
                 new QueryCommand(params)
             );
@@ -62,72 +52,85 @@ export class DynamoDBService implements OnModuleInit {
             return result.Items ? (result.Items as T[]) : [];
         } catch (error) {
             console.error(
-                `Failed to query table ${tableName}: ${error.message}`
+                `Failed to query items with PK '${pk}': ${error.message}`
             );
             return [];
         }
     }
 
-    async scanTable<T>(tableName: DynamoTables): Promise<T[]> {
+    async queryByGSI<T>(
+        indexName: string,
+        key: string,
+        value: string
+    ): Promise<T[]> {
         try {
-            const params = { TableName: tableName };
+            const params = buildQueryByGSIParams(indexName, key, value);
             const result = await this.dynamoDBClient.send(
-                new ScanCommand(params)
+                new QueryCommand(params)
             );
 
-            return (result.Items as T[]) || [];
+            return result.Items ? (result.Items as T[]) : [];
         } catch (error) {
-            throw new Error(`Failed to scan table: ${error.message}`);
+            console.error(
+                `Failed to query GSI '${indexName}' with key '${key}': ${error.message}`
+            );
+            return [];
         }
     }
 
-    async putItem(
-        tableName: DynamoTables,
-        item: Record<string, any>
-    ): Promise<void> {
-        const params = { TableName: tableName, Item: item };
-        await this.dynamoDBClient.send(new PutCommand(params));
+    async putItem(item: Record<string, any>): Promise<void> {
+        try {
+            const params = { TableName: DYNAMO_DB_TABLE_NAME, Item: item };
+            await this.dynamoDBClient.send(new PutCommand(params));
+            console.log(
+                `✅ Successfully inserted item into ${DYNAMO_DB_TABLE_NAME}:`,
+                item
+            );
+        } catch (error) {
+            console.error(
+                `❌ Failed to put item into ${DYNAMO_DB_TABLE_NAME}:`,
+                error
+            );
+            throw new Error(`Failed to put item: ${error.message}`);
+        }
     }
 
-    async updateItem(input: UpdateDynamodbItemInput): Promise<any> {
+    async updateItem(input: UpdateCommandInput): Promise<any> {
         try {
-            const params = convertToUpdateCommandInput(input);
-
             const result = await this.dynamoDBClient.send(
-                new UpdateCommand(params)
+                new UpdateCommand(input)
             );
-
             return result.Attributes;
         } catch (error) {
             dynamodbConditionalErrorHandle(error);
         }
     }
 
-    async deleteItem(
-        tableName: DynamoTables,
-        key: Record<string, any>
-    ): Promise<void> {
+    async deleteItem(pk: string, sk: string): Promise<void> {
         try {
-            const params = { TableName: tableName, Key: key };
+            const params = buildDeleteParams(pk, sk);
             await this.dynamoDBClient.send(new DeleteCommand(params));
         } catch (error) {
             throw new Error(`Failed to delete item: ${error.message}`);
         }
     }
 
-    private async createTable(
-        tableKey: keyof typeof dynamoDbTableInitParams
-    ): Promise<void> {
+    private async createTable(): Promise<void> {
         try {
-            const params = dynamoDbTableInitParams[tableKey];
-            await this.dynamoDBClient.send(new CreateTableCommand(params));
-            console.log(`✅ Table '${params.TableName}' created successfully`);
+            await this.dynamoDBClient.send(
+                new CreateTableCommand(dynamoDbTableInitParams)
+            );
+            console.log(
+                `✅ Table '${dynamoDbTableInitParams.TableName}' created successfully`
+            );
         } catch (error) {
             if (error.name === 'ResourceInUseException') {
-                console.log(`⚠️ Table '${tableKey}' already exists.`);
+                console.log(
+                    `⚠️ Table '${dynamoDbTableInitParams.TableName}' already exists.`
+                );
             } else {
                 console.error(
-                    `❌ Failed to create table '${tableKey}': ${error.message}`
+                    `❌ Failed to create table '${dynamoDbTableInitParams.TableName}': ${error.message}`
                 );
             }
         }

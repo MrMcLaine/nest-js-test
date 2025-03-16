@@ -19,7 +19,6 @@ type BookReviewDto {
   bookId: String!
   createdAt: String!
   rating: Int!
-  reviewId: String!
   reviewText: String
   userId: String!
 }
@@ -102,9 +101,8 @@ input UpdateBookInput {
 }
 
 input UpdateBookReviewInput {
-  bookId: String
+  bookId: String!
   rating: Int
-  reviewId: String!
   reviewText: String
 }
 

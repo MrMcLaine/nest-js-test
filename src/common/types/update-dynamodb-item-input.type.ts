@@ -1,8 +1,6 @@
-import { DynamoTables } from '@common/enums';
-
 export interface UpdateDynamodbItemInput {
-    tableName: DynamoTables;
-    key: Record<string, any>;
-    updates: Record<string, any>;
+    key: Record<string, string | number>;
+    updates: Record<string, string | number | boolean | null>;
     conditionExpression?: string;
+    includeUpdatedAt?: boolean;
 }

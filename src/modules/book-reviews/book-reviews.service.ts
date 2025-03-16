@@ -1,12 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import { DynamoTables } from '@common/enums';
+import { convertToUpdateCommandInput } from '@common/utils';
 import { DynamoDBService } from '@providers/dynamodb/dynamodb.service';
 import { RedisService } from '@providers/redis/redis.service';
-import {
-    transformBookReviewToDto,
-    transformToUpdateDynamodbItemInputByReview,
-    extractUserIdFromReviewId,
-} from '@book-reviews/utils';
 import {
     CreateBookReviewInput,
     BookReviewDto,
@@ -28,8 +23,10 @@ export class BookReviewsService {
 
             if (reviewCached) return reviewCached;
 
-            const reviews = await this.dynamoDBService.scanTable<BookReview>(
-                DynamoTables.BOOK_REVIEWS
+            const reviews = await this.dynamoDBService.queryByGSI<BookReview>(
+                'EntityTypeIndex',
+                'EntityType',
+                'REVIEW'
             );
 
             await this.redisService.setAllBookReviewsToCache(reviews);
@@ -47,11 +44,18 @@ export class BookReviewsService {
         userId: string
     ): Promise<BookReviewDto> {
         try {
-            const bookReviewData = transformBookReviewToDto(userId, data);
-            await this.dynamoDBService.putItem(
-                DynamoTables.BOOK_REVIEWS,
-                bookReviewData
-            );
+            const bookReviewData: BookReview = {
+                PK: `BOOK#${data.bookId}`,
+                SK: `USER#${userId}`,
+                bookId: data.bookId,
+                userId,
+                rating: data.rating,
+                reviewText: data.reviewText,
+                createdAt: new Date().toISOString(),
+                EntityType: 'REVIEW',
+            };
+
+            await this.dynamoDBService.putItem(bookReviewData);
 
             await this.redisService.deleteAllBookReviewsCache();
 
@@ -66,11 +70,19 @@ export class BookReviewsService {
         userId: string
     ): Promise<BookReviewDto> {
         try {
-            this.checkBookReviewOwner({ userId, reviewId: data.reviewId });
+            await this.checkBookReviewOwner({ userId, bookId: data.bookId });
 
-            const updatedReview = await this.dynamoDBService.updateItem(
-                transformToUpdateDynamodbItemInputByReview(data)
-            );
+            const updateParams = convertToUpdateCommandInput({
+                key: { PK: `BOOK#${data.bookId}`, SK: `USER#${userId}` },
+                updates: {
+                    rating: data.rating,
+                    reviewText: data.reviewText,
+                },
+                includeUpdatedAt: true,
+            });
+
+            const updatedReview =
+                await this.dynamoDBService.updateItem(updateParams);
 
             await this.redisService.deleteAllBookReviewsCache();
 
@@ -80,28 +92,32 @@ export class BookReviewsService {
         }
     }
 
-    async deleteBookReview(reviewId: string, userId: string): Promise<string> {
+    async deleteBookReview(bookId: string, userId: string): Promise<string> {
         try {
-            this.checkBookReviewOwner({ userId, reviewId });
-            await this.dynamoDBService.deleteItem(DynamoTables.BOOK_REVIEWS, {
-                reviewId,
-            });
+            await this.checkBookReviewOwner({ userId, bookId });
+            await this.dynamoDBService.deleteItem(
+                `BOOK#${bookId}`,
+                `USER#${userId}`
+            );
 
             await this.redisService.deleteAllBookReviewsCache();
 
-            return `Review with ID ${reviewId} deleted successfully`;
+            return `Review for book with ID ${bookId} deleted successfully`;
         } catch (error) {
             throw new Error(`Failed to delete the review: ${error.message}`);
         }
     }
 
-    private checkBookReviewOwner(input: {
+    private async checkBookReviewOwner(input: {
         userId: string;
-        reviewId: string;
-    }): void {
-        const userIdFromReviewId = extractUserIdFromReviewId(input.reviewId);
+        bookId: string;
+    }): Promise<void> {
+        const review = await this.dynamoDBService.queryByPK<BookReview>(
+            `BOOK#${input.bookId}`,
+            `USER#${input.userId}`
+        );
 
-        if (input.userId !== userIdFromReviewId) {
+        if (!review || review.length === 0) {
             throw new Error('You are not the owner of this book review');
         }
     }

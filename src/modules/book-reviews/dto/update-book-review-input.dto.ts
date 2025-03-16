@@ -5,7 +5,7 @@ import { CreateBookReviewInput } from '@book-reviews/dto';
 @InputType()
 export class UpdateBookReviewInput extends PartialType(CreateBookReviewInput) {
     @Field()
-    @IsNotEmpty({ message: 'Review ID is required' })
-    @IsString({ message: 'Review ID must be a valid string' })
-    reviewId: string;
+    @IsNotEmpty({ message: 'Book ID is required' })
+    @IsString({ message: 'Book ID must be a valid string' })
+    bookId: string;
 }

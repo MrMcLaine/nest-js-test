@@ -1,5 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import { DynamoTables } from '@common/enums/dynamo-tables.enum';
 import { DynamoDBService } from '@providers/dynamodb/dynamodb.service';
 import { UserActivityLogDto } from './dto/user-activity-log.dto';
 import { UserActivityLog } from './types/user-activity-log.type';
@@ -10,9 +9,9 @@ export class UserActivityLogsService {
 
     async getUserActivityLogs(userId: string): Promise<UserActivityLogDto[]> {
         try {
-            return await this.dynamoDBService.queryTable<UserActivityLogDto>(
-                DynamoTables.USER_ACTIVITY_LOGS,
-                { userId }
+            return await this.dynamoDBService.queryByPK<UserActivityLog>(
+                `USER#${userId}`,
+                'ACTIVITY#'
             );
         } catch (error) {
             throw new Error(
@@ -24,14 +23,13 @@ export class UserActivityLogsService {
     async createUserActivityLog(input: UserActivityLog): Promise<void> {
         try {
             const logData = {
-                id: `${input.userId}_${Date.now()}`,
+                PK: `USER#${input.userId}`,
+                SK: `ACTIVITY#${Date.now()}`,
+                EntityType: 'USER_ACTIVITY',
                 ...input,
             };
 
-            await this.dynamoDBService.putItem(
-                DynamoTables.USER_ACTIVITY_LOGS,
-                logData
-            );
+            await this.dynamoDBService.putItem(logData);
         } catch (error) {
             throw new Error(
                 `Failed to create new user activity log: ${error.message}`

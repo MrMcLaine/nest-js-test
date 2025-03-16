@@ -1,17 +1,18 @@
 import { Injectable } from '@nestjs/common';
-import { DynamoDBService } from '@providers/dynamodb/dynamodb.service';
+import { UserActivityLogsRepository } from '@user-activity-log/user-activity-logs.repository';
 import { UserActivityLogDto } from './dto/user-activity-log.dto';
 import { UserActivityLog } from './types/user-activity-log.type';
 
 @Injectable()
 export class UserActivityLogsService {
-    constructor(private readonly dynamoDBService: DynamoDBService) {}
+    constructor(
+        private readonly userActivityLogsRepository: UserActivityLogsRepository
+    ) {}
 
     async getUserActivityLogs(userId: string): Promise<UserActivityLogDto[]> {
         try {
-            return await this.dynamoDBService.queryByPK<UserActivityLog>(
-                `USER#${userId}`,
-                'ACTIVITY#'
+            return await this.userActivityLogsRepository.getUserActivityLogs(
+                userId
             );
         } catch (error) {
             throw new Error(
@@ -22,14 +23,7 @@ export class UserActivityLogsService {
 
     async createUserActivityLog(input: UserActivityLog): Promise<void> {
         try {
-            const logData = {
-                PK: `USER#${input.userId}`,
-                SK: `ACTIVITY#${Date.now()}`,
-                EntityType: 'USER_ACTIVITY',
-                ...input,
-            };
-
-            await this.dynamoDBService.putItem(logData);
+            await this.userActivityLogsRepository.createUserActivityLog(input);
         } catch (error) {
             throw new Error(
                 `Failed to create new user activity log: ${error.message}`
